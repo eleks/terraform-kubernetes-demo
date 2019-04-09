@@ -1,0 +1,1 @@
+<%= new File('/opt/.eval.json').text %>

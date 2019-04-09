@@ -1,0 +1,26 @@
+---
+
+## let's evaluate app-roles inside cloud from terraform output
+# as result we will have:
+# roles:
+#   appname:
+#     host: xxx.public
+#     service: xxx.local
+#     port:
+#       https: yyy
+#
+####### below is the groovy code evaluated inside docker and could be used inside configuration-templates
+roles: |-
+  ${
+    cloud.hosts.collectEntries{role,host->
+      [
+        role,[
+            'host': host,
+            'service': role+'.'+cloud.domain,
+            'port': cloud.ports[role].collectEntries{pname,plist->
+                [pname,(plist+' \t \t \t').split(' ')[2].trim()]
+            }.findAll{k,v->v}
+        ]
+      ]
+    } 
+  }

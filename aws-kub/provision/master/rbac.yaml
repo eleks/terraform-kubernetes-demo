@@ -1,0 +1,23 @@
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: deployer-role
+rules:
+- apiGroups: ["", "batch", "extensions", "apps"]
+  resources: ["*"]
+  verbs: ["*"]
+
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: deployer-role-binding
+subjects:
+- kind: User
+  name: deployer
+  apiGroup: ""
+roleRef:
+  kind: ClusterRole
+  name: deployer-role
+  apiGroup: ""

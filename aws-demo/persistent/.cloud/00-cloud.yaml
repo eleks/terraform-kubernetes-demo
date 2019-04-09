@@ -1,0 +1,12 @@
+---00
+cloud:
+  ## NOTE: evaluated from terraform
+  # main public hostname
+  dns: ${public_host_name}
+  # the domain name for the services to build full service name inside kubernetes 
+  # if communication required inside kube-cluster
+  domain: ${domain}
+  # component hosts defined in component-roles.tf
+  hosts: ${component_hosts}
+  # component ports defined in component-roles.tf
+  ports: ${component_ports}
