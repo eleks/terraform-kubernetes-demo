@@ -29,6 +29,7 @@ resource "null_resource" "deploy" {
     inline = [
       "echo ${ join(",",var.depends_on) }",    ## just to make depends_on working
       "rm -rf ${var.persistent_remote}/*",
+      "rm -rf ${var.persistent_remote}/.??*",
       "unzip -o ${local.remote_zip} -d ${var.persistent_remote}",
       "rm -f ${local.remote_zip}"
       # "find ${var.persistent_remote} -name *.tft -delete"
