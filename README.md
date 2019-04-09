@@ -48,8 +48,8 @@ Create file `1.auto.tfvars` in your root module (you can use `aws-demo`) with fo
 ```shell
 aws_access_key = "Here put your access_key"
 aws_secret_key = "Here put your secret_key"
-## the following key will be used as a token to access kubernetes. change it.
-deployer_token = "1234567890-1234567890-1234567890-1234567890"
+## the following key will be used as a token to access kubernetes api and dashboard. change it!
+kubeapi_token = "1234567890-1234567890-1234567890-1234567890"
 ```  
 Actually the file should match `*.auto.tfvars` to be loaded automatically.
 
