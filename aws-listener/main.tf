@@ -22,6 +22,8 @@ variable "tags"  {
 }
 # variable to implement depends-on values. not used inside module...
 variable "depends_on"{ default = [], type = "list"}
+variable "health_interval" {default=300}
+
 
 locals {
   default_tags = { 
@@ -99,7 +101,8 @@ resource "aws_lb_target_group" "target" {
     path                = ""
     protocol            = "${ local.target_protocol }"
     timeout             = 5
-    unhealthy_threshold = 3
+    unhealthy_threshold = 5
+    interval            = "${var.health_interval}"
   }
 
   stickiness {
