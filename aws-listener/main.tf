@@ -54,12 +54,25 @@ output "target_protocol" {
 #--------------------------------------------------------
 #-- Listener 
 #--------------------------------------------------------
-resource "aws_lb_listener" "listener" {
+resource "aws_lb_listener" "listener-https" {
+  count = "${ local.target_protocol=="HTTPS" ? 1 : 0 }"
   load_balancer_arn = "${var.params["public_arn"]}"
   port              = "${ local.public_port }"
   protocol          = "${ local.public_protocol }"
   ssl_policy        = "ELBSecurityPolicy-TLS-1-1-2017-01"
   certificate_arn   = "${var.params["certificate_arn"]}"
+
+  default_action {
+    type             = "forward"
+    target_group_arn = "${aws_lb_target_group.target.arn}"
+  }
+}
+
+resource "aws_lb_listener" "listener-http" {
+  count = "${ local.target_protocol=="HTTP" ? 1 : 0 }"
+  load_balancer_arn = "${var.params["public_arn"]}"
+  port              = "${ local.public_port }"
+  protocol          = "${ local.public_protocol }"
 
   default_action {
     type             = "forward"
