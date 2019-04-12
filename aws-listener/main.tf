@@ -42,7 +42,7 @@ output "public_port" {
   value = "${local.public_port}"
 }
 output "public_protocol" {
-  value = "${local.public_protocol}"
+  value = "${ lower(local.public_protocol) }"
 }
 output "target_port" {
   value = "${local.target_port}"
