@@ -1,7 +1,7 @@
 ## all module outputs here
 
 output "bastion-ip" {
-  value = "${aws_instance.bastion.0.public_ip}"
+  value = "${element(aws_instance.bastion.*.public_ip,0)}"
 }
 
 output "dashboard" {
