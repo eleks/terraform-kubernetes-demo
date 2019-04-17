@@ -17,6 +17,10 @@ module "kub" {
 
   certificate_key  = "${module.default-certs.key}"
   certificate_body = "${module.default-certs.crt}"
+
+  bastion_post_init=[
+    "sudo yum install -y mysql"
+  ]
 }
 
 # default params for port listeners defined inside kub module

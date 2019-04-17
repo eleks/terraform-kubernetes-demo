@@ -1,0 +1,19 @@
+---
+camunda:
+  db:
+    main:
+      host: ${tf_dbhost}
+      port: ${tf_dbport}
+      user: ${tf_dbuser}
+      password: ${tf_dbpass}
+      driver: com.mysql.cj.jdbc.Driver
+      database: camunda
+      url: jdbc:mysql://${tf_dbhost}:${tf_dbport}/camunda?useUnicode=true&characterEncoding=utf8
+    main:
+      host: ${tf_dbhost}
+      port: ${tf_dbport}
+      user: ${tf_dbuser}
+      password: ${tf_dbpass}
+      driver: com.mysql.cj.jdbc.Driver
+      database: camunda_demo
+      url: jdbc:mysql://${tf_dbhost}:${tf_dbport}/camunda_demo?useUnicode=true&characterEncoding=utf8

@@ -14,7 +14,7 @@ locals {
   component_ports = {
     # port_name = "local node public"
     bpm = {
-      http   = "8080 31180 8443 HTTPS"
+      http   = "8080 31180 8080 HTTP"
     }
   }
 }
