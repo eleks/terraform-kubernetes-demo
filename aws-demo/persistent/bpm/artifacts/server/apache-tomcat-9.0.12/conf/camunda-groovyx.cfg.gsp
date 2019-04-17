@@ -1,6 +1,6 @@
 import groovyx.acme.net.AcmeHTTP;
 
-sensitive = dependency.load('sensitive.cfg')
+//sensitive = dependency.load('sensitive.cfg')
 
 email {
 	//for gmail smtp check your mailbox if google not blocking you...
@@ -12,9 +12,9 @@ email {
 	//mail.smtp.ssl.enable    = "true"
 	mail.smtp.starttls.enable= "true"
 	//=======  custom fields processed by class EMAIL =======
-	mail.user               = sensitive.email.mail.user
-	mail.pass               = sensitive.email.mail.pass
-	mail.from               = sensitive.email.mail.user
+	mail.user               = "<%= camunda.mail.user %>"
+	mail.pass               = "<%= camunda.mail.pass %>"
+	mail.from               = "<%= camunda.mail.user %>"
 	mail.fromName           = "camunda demo"
 }
 
@@ -35,10 +35,11 @@ rest {
         http_client = AcmeHTTP.builder(
             url: 'https://jiravm.atlassian.net/rest/api/2',
             headers: [
-                Authorization   : sensitive.rest.jira.auth,
+                Authorization   : "<%= camunda.rest.jira.auth %>",
                 "Content-Type"  : "application/json"
             ]
         )
+        //method to register issue in jira
         tripRegister = { _summary, _description ->
             def t = rest.jira.http_client.post{
                 setPath ('/issue')
@@ -54,6 +55,7 @@ rest {
             assert t.response.code in [200,201]
             return t.response.body
         }
+        //method add a comment into an jira issue 
         comment = { _key, _body ->
             def t = rest.jira.http_client.post{
                 setPath ("/issue/${_key}/comment")
@@ -62,7 +64,7 @@ rest {
             assert t.response.code in [200,201]
             return t.response.body
         }
-        //moves issue to a status
+        //moves issue to a defined status
         toStatus = { _key, _status ->
         	//get current status
             def t = rest.jira.http_client.get{

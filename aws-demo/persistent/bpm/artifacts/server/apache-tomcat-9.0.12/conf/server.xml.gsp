@@ -71,14 +71,23 @@
               type="javax.sql.DataSource" 
               factory="org.apache.tomcat.jdbc.pool.DataSourceFactory"
               uniqueResourceName="process-engine"
-              driverClassName="com.mysql.cj.jdbc.Driver" 
-              url="jdbc:mysql://eleksplatformdb.cilc2rgy1cbx.us-west-2.rds.amazonaws.com:3306/camunda?useUnicode=true&amp;characterEncoding=utf8"
+              driverClassName="<%= camunda.db.main.driver %>" 
+              url="<%= camunda.db.main.url.replaceAll('&','&amp;') %>"
               defaultTransactionIsolation="READ_COMMITTED"
-              username="root"  
-              password="DataPlatform188+"
+              username="<%= camunda.db.main.user %>"  
+              password="<%= camunda.db.main.pass %>"
               maxActive="20"
               minIdle="5"
-              maxIdle="20" />
+              maxIdle="20" 
+
+              testWhileIdle="true"
+              testOnBorrow="true"
+              validationQuery="select 1"
+              validationQueryTimeout="3"
+              ignoreExceptionOnPreLoad="true"
+              logAbandoned="true"
+              jdbcInterceptors="SlowQueryReport(threshold=10000,logSlow=true,logFailed=true,maxQueries=2000);StatementCache(max=100,prepared=true,callable=true)"
+              />
 
     <Resource name="global/camunda-bpm-platform/process-engine/ProcessEngineService!org.camunda.bpm.ProcessEngineService" auth="Container"
               type="org.camunda.bpm.ProcessEngineService"

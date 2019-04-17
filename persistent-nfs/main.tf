@@ -5,7 +5,7 @@ locals {
   remote_zip = "/home/${var.ssh_user}/tmp-persistent-nfs.zip"
 }
 
-# zip 
+# zip
 data "archive_file" "persistent-zip" {
   type        = "zip"
   source_dir  = "${var.persistent_local}"
@@ -19,7 +19,7 @@ resource "null_resource" "deploy" {
     user        = "${var.ssh_user}"
     private_key = "${file("${var.key_path_local}${var.key_name}")}"
   }
-   
+
   provisioner "file" "persistent-zip" {
     source        = "${local.local_zip}"
     destination   = "/home/${var.ssh_user}/tmp-persistent-nfs.zip"
@@ -27,7 +27,7 @@ resource "null_resource" "deploy" {
 
   provisioner "remote-exec" {
     inline = [
-      "echo ${ join(",",var.depends_on) }",    ## just to make depends_on working
+      "echo ${ join(",",var.depends_on) }",    ## just to make the depends_on parameter working
       "rm -rf ${var.persistent_remote}/*",
       "rm -rf ${var.persistent_remote}/.??*",
       "unzip -o ${local.remote_zip} -d ${var.persistent_remote}",
@@ -53,7 +53,7 @@ resource "null_resource" "templates" {
     user        = "${var.ssh_user}"
     private_key = "${file("${var.key_path_local}${var.key_name}")}"
   }
-   
+
   provisioner "file" "template-put" {
     content       = "${data.template_file.templates.*.rendered[count.index]}"
     #content       = "..."

@@ -27,9 +27,15 @@ variable "bastion_flavor"     { default = "t2.micro" }
 variable "certificate_key"    {  }
 variable "certificate_body"   {  }
 
+# shell commands to run on bastion after initialization finished on bastion and kub-master
+variable "bastion_post_init"  {
+  type    = "list"
+  default = []
+}
+
 locals {
   cluster_name = "${ length(var.cluster_name)>0 ? var.cluster_name : terraform.workspace }"
-  default_tags = { 
+  default_tags = {
     Env="${terraform.workspace}"
     Terraform="true"
   }

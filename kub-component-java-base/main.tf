@@ -40,6 +40,12 @@ resource "kubernetes_deployment" "component-deploy" {
       depends_on = "${jsonencode(var.depends_on)}"
     }
   }
+  lifecycle {
+    ignore_changes = [
+      "metadata.0.annotations.depends_on",
+      "metadata.0.annotations.%",
+    ]
+  }
 
   spec {
     selector {

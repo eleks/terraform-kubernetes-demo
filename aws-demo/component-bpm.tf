@@ -1,6 +1,7 @@
 ## define bpm master component
 
 module "bpm" {
+  //source    = "github.com/eleks/terraform-kubernetes-demo/kub-component-java-base"
   source    = "../kub-component-java-base"
 
   name      = "bpm"
@@ -20,7 +21,8 @@ module "bpm" {
 }
 
 ## expose public ports
-module "port-bpm-https" {
+module "port-bpm-http" {
+  //source          = "github.com/eleks/terraform-kubernetes-demo/aws-listener"
   source          = "../aws-listener"
   port            = "http"
   ports           = "${local.component_ports["bpm"]}"
@@ -28,6 +30,6 @@ module "port-bpm-https" {
 }
 
 output "component-bpm" {
-  value = "https://${data.null_data_source.component_hosts.outputs["bpm"]}:${module.port-bpm-https.public_port}"
+  value = "${module.port-bpm-http.public_protocol}://${data.null_data_source.component_hosts.outputs["bpm"]}:${module.port-bpm-http.public_port}"
 }
 

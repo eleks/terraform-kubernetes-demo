@@ -1,19 +1,27 @@
 ---
+### sensitive parameters coming from terraform
+### and passed to container for self-initialization by GSP (groovy) templating
 camunda:
   db:
     main:
-      host: ${tf_dbhost}
-      port: ${tf_dbport}
-      user: ${tf_dbuser}
-      password: ${tf_dbpass}
+      host: ${tf_db_host}
+      port: ${tf_db_port}
+      user: ${tf_db_user}
+      pass: ${tf_db_pass}
       driver: com.mysql.cj.jdbc.Driver
       database: camunda
-      url: jdbc:mysql://${tf_dbhost}:${tf_dbport}/camunda?useUnicode=true&characterEncoding=utf8
-    main:
-      host: ${tf_dbhost}
-      port: ${tf_dbport}
-      user: ${tf_dbuser}
-      password: ${tf_dbpass}
+      url: jdbc:mysql://${tf_db_host}:${tf_db_port}/camunda?useUnicode=true&characterEncoding=utf8
+    demo:
+      host: ${tf_db_host}
+      port: ${tf_db_port}
+      user: ${tf_db_user}
+      pass: ${tf_db_pass}
       driver: com.mysql.cj.jdbc.Driver
       database: camunda_demo
-      url: jdbc:mysql://${tf_dbhost}:${tf_dbport}/camunda_demo?useUnicode=true&characterEncoding=utf8
+      url: jdbc:mysql://${tf_db_host}:${tf_db_port}/camunda_demo?useUnicode=true&characterEncoding=utf8
+  mail:
+    user: ${tf_mail_user}
+    pass: ${tf_mail_pass}
+  rest:
+    jira:
+      auth: ${tf_jira_auth}

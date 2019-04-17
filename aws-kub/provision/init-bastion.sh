@@ -31,3 +31,6 @@ sudo chmod 775 /var/nfs
 sudo echo '/var/nfs        *(rw,sync,no_subtree_check)' >> /etc/exports
 sudo exportfs -a
 mkdir -p /var/nfs/persistent
+
+chmod +x /home/centos/provision/kub.sh
+sudo ln -s /home/centos/provision/kub.sh /usr/bin/kub

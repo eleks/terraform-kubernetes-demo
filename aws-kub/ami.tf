@@ -4,6 +4,7 @@
 data "aws_availability_zones" "available" {}
 data "aws_ami" "centos_ami" {
   most_recent      = true
+  owners           = ["amazon","self","aws-marketplace"]
 
   filter {
     name   = "name"

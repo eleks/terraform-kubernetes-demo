@@ -5,3 +5,4 @@ terraform.tfstate.d
 *.secvars
 *.zip
 *.tfvars
+sensitive.cfg

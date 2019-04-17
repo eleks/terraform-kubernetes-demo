@@ -78,6 +78,11 @@ resource "null_resource" "init-bastion" {
     content       = "${data.template_file.init-bastion.rendered}"
     destination   = "/home/centos/provision/init-instance.sh"
   }
+  ## put static files to master
+  provisioner "file" {
+    source        = "${path.module}/provision/bastion/"
+    destination   = "/home/centos/provision"
+  }
 
   provisioner "remote-exec" {
     inline = [
@@ -101,6 +106,22 @@ resource "null_resource" "finit-bastion" {
       "mkdir -p /home/centos/.kube",
       "scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null master.${var.dns_domain}:/home/centos/.kube/config /home/centos/.kube/config"
     ]
+  }
+  depends_on=["null_resource.init-bastion","null_resource.init-master"]
+}
+
+# customized post-init of the bastion
+resource "null_resource" "bastion_post_init" {
+  count = "${ length(var.bastion_post_init)>0 ? 1 : 0 }"
+  connection {
+    type        = "ssh"
+    host        = "${aws_instance.bastion.public_ip}"
+    user        = "centos"
+    private_key = "${file("${var.key_path_local}${var.key_name}")}"
+  }
+  # copy kube-config from the master to bastion.
+  provisioner "remote-exec" {
+    inline = "${var.bastion_post_init}"
   }
   depends_on=["null_resource.init-bastion","null_resource.init-master"]
 }

@@ -111,7 +111,8 @@ resource "aws_lb_target_group" "target" {
   }
 
   tags {
-    env = "${terraform.workspace}"
+    Env = "${terraform.workspace}"
+    Terraform="true"
   }
 }
 #---------------------------------------------------------

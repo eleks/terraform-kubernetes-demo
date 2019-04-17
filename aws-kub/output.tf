@@ -4,6 +4,10 @@ output "bastion-ip" {
   value = "${join(",",aws_instance.bastion.*.public_ip)}"
 }
 
+output "vpc_id" {
+  value = "${aws_vpc.home.id}"
+}
+
 output "dashboard" {
   value = "https://${aws_lb.frontend.dns_name}"
 }
