@@ -1,0 +1,16 @@
+# required variables file
+#
+# cloud access
+aws_access_key = "AKLKJLKJLKJLKJLKJLKJ"
+aws_secret_key = "hLKJlkjLKJlkjLKJlkjLKJlkjLKJlkjLKJlkj123"
+# kupernetes access
+kubeapi_token  = "1234567890-1234567890-1234567890-1234567890"
+# environment specific
+# the following parameters required for camunda process
+# skip it you don't want to execute process instance
+tf_mail_user   = "...@gmail.com"
+tf_mail_pass   = "LKJlkjLKJlkjLKJlkjkj"
+tf_jira_auth   = "Basic dmLKJlkjLKJlkjLKJlkjLKJlkjLKJLkjLKJlkjlKJlkjlKJLkjLKJlkj"
+# mysql database will be created with following root credentials
+tf_db_user     = "root"
+tf_db_pass     = "LKJlkjLKJlkj"
