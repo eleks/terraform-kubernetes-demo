@@ -1,0 +1,5 @@
+  - name: port-${tf_name}-${tf_port_local}
+    protocol: TCP
+    port: ${tf_port_local}
+    targetPort: ${tf_port_local}
+    nodePort: ${tf_port_node}

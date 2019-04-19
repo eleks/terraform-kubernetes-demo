@@ -3,10 +3,10 @@ output "mysql-address" {
   value = "${aws_db_instance.mysql.address}:${aws_db_instance.mysql.port}"
 }
 
+# not secure but we want just demo db
 resource "aws_security_group" "mysql" {
   name        = "${terraform.workspace}-mysql-sg"
   description = "Security group for mysql"
-  # vpc_id      = "${module.kub.vpc_id}"
 
   ingress {
     from_port   = 3306
@@ -56,6 +56,7 @@ module "db-init" {
     "mysql -u${var.tf_db_user} -p${var.tf_db_pass} -h${aws_db_instance.mysql.address} -P${aws_db_instance.mysql.port} < /var/nfs/persistent/bpm-sql/camunda.sql",
     "mysql -u${var.tf_db_user} -p${var.tf_db_pass} -h${aws_db_instance.mysql.address} -P${aws_db_instance.mysql.port} < /var/nfs/persistent/bpm-sql/camunda_demo.sql",
   ]
+  depends_on = ["${module.persistent.ready}"]
 }
 
 

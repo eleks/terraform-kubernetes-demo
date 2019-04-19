@@ -2,6 +2,8 @@
 #--General variables section
 #--------------------------------------------------------
 
+variable "aws_region"     { default = "us-west-2" }
+
 variable "aws_access_key" {}
 variable "aws_secret_key" {}
 variable "kubeapi_token"  {}
@@ -13,5 +15,4 @@ variable "tf_jira_auth"   {} // "Basic d2326432643263426342342463745357454548654
 variable "tf_db_user"     {}
 variable "tf_db_pass"     {}
 
-variable "aws_region"     { default = "us-west-2" }
-
+variable "tf_grafana_pass"{}

@@ -20,19 +20,19 @@ resource "kubernetes_service" "component-service-p3" {
     type = "NodePort"
 
     port {
-      name        = "port-${var.name}-${ element(split(" ",element(local.ports,0)),0) }"
+      name        = "port-${var.name}-${ element(split(" ",element(local.ports,0)),0) }-${ element(split(" ",element(local.ports,0)),1) }"
       port        =                  "${ element(split(" ",element(local.ports,0)),0) }"
       target_port =                  "${ element(split(" ",element(local.ports,0)),0) }"
       node_port   =                  "${ element(split(" ",element(local.ports,0)),1) }"
     }
     port {
-      name        = "port-${var.name}-${ element(split(" ",element(local.ports,1)),0) }"
+      name        = "port-${var.name}-${ element(split(" ",element(local.ports,1)),0) }-${ element(split(" ",element(local.ports,1)),1) }"
       port        =                  "${ element(split(" ",element(local.ports,1)),0) }"
       target_port =                  "${ element(split(" ",element(local.ports,1)),0) }"
       node_port   =                  "${ element(split(" ",element(local.ports,1)),1) }"
     }
     port {
-      name        = "port-${var.name}-${ element(split(" ",element(local.ports,2)),0) }"
+      name        = "port-${var.name}-${ element(split(" ",element(local.ports,2)),0) }-${ element(split(" ",element(local.ports,2)),1) }"
       port        =                  "${ element(split(" ",element(local.ports,2)),0) }"
       target_port =                  "${ element(split(" ",element(local.ports,2)),0) }"
       node_port   =                  "${ element(split(" ",element(local.ports,2)),1) }"

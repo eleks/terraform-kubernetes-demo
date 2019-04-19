@@ -1,17 +1,7 @@
 #--------------------------------------------------------
 #--Create Application LoadBalancer
 #--------------------------------------------------------
-/*
-locals {
-  # collect all below results into a map to expose ports later
-  default_expose_port_params = {
-    vpc_id          = "${aws_vpc.home.id}"
-    certificate_arn = "${aws_iam_server_certificate.web.arn}"
-    public_arn      = "${aws_lb.frontend.arn}"
-    target_id       = "${aws_instance.master.0.private_ip}"
-  }
-}
-*/
+
 #--------------------------------------------------------
 #--Creating self-signed certificates
 #--------------------------------------------------------

@@ -1,0 +1,48 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: ${tf_name}
+  namespace: ${tf_namespace}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: ${tf_name}
+  template:
+    metadata:
+      namespace: ${tf_namespace}
+      labels:
+        name: ${tf_name}
+    spec:
+      containers:
+      - name: ${tf_name}
+        image: ${tf_image}
+        env:
+${tf_env}
+        resources:
+          limits:
+            cpu: ${tf_cpu_max}
+            memory: ${tf_mem_max}
+          requests:
+            cpu: ${tf_cpu_min}
+            memory: ${tf_mem_min}
+        volumeMounts:
+${tf_claim_mounts}
+      volumes:
+${tf_claim_volumes}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ${tf_name}
+  namespace: ${tf_namespace}
+  labels:
+    name: ${tf_name}
+spec:
+  type: NodePort
+  ports:
+${tf_service_ports}
+  selector:
+    name: ${tf_name}

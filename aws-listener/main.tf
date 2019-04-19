@@ -12,7 +12,7 @@ variable "params" {
 }
 variable "port"  {} # port name from ports map 
 variable "ports" {
-  # ports in format: { port =  "local kuber public ?pub_protocol" } 
+  # ports in format: { port =  "local kuber public ?priv_protocol" } 
   type = "map"
 }
 variable "tags"  {
@@ -35,8 +35,8 @@ locals {
   port_list = "${ split( " ", var.ports[var.port] ) }"
   public_port = "${local.port_list[2]}"
   target_port = "${local.port_list[1]}"
-  target_protocol = "${ length(split("https",var.port))>1 ? "HTTPS" : "HTTP" }"
-  public_protocol = "${ length(local.port_list)>3 ? element(local.port_list,3) : local.target_protocol }"
+  public_protocol = "${ length(split("https",var.port))>1 ? "HTTPS" : "HTTP" }"
+  target_protocol = "${ length(local.port_list)>3 ? element(local.port_list,3) : local.public_protocol }"
 
 }
 
@@ -57,7 +57,7 @@ output "target_protocol" {
 #-- Listener 
 #--------------------------------------------------------
 resource "aws_lb_listener" "listener-https" {
-  count = "${ local.target_protocol=="HTTPS" ? 1 : 0 }"
+  count = "${ local.public_protocol=="HTTPS" ? 1 : 0 }"
   load_balancer_arn = "${var.params["public_arn"]}"
   port              = "${ local.public_port }"
   protocol          = "${ local.public_protocol }"
@@ -71,7 +71,7 @@ resource "aws_lb_listener" "listener-https" {
 }
 
 resource "aws_lb_listener" "listener-http" {
-  count = "${ local.target_protocol=="HTTP" ? 1 : 0 }"
+  count = "${ local.public_protocol=="HTTP" ? 1 : 0 }"
   load_balancer_arn = "${var.params["public_arn"]}"
   port              = "${ local.public_port }"
   protocol          = "${ local.public_protocol }"

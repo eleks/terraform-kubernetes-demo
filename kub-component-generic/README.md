@@ -1,0 +1,3 @@
+the generic kub component module with simplified parameters.
+
+hope in terraform version 0.12 with loops we could avoid templating. we'll see...

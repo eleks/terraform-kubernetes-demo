@@ -1,0 +1,22 @@
+# config file version
+apiVersion: 1
+
+# list of datasources to insert/update depending
+# https://grafana.com/docs/administration/provisioning/
+datasources:
+
+- name:     camunda
+  type:     mysql
+  url:      ${tf_db_host}:${tf_db_port}
+  database: camunda
+  user:     ${tf_db_user}
+  password: ${tf_db_pass}
+  access:   proxy
+
+- name:     camunda_demo
+  type:     mysql
+  url:      ${tf_db_host}:${tf_db_port}
+  database: camunda_demo
+  user:     ${tf_db_user}
+  password: ${tf_db_pass}
+  access:   proxy

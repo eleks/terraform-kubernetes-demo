@@ -27,8 +27,8 @@ sudo systemctl start nfs-server.service
 sudo chmod 646 /etc/exports
 sudo mkdir /var/nfs
 sudo chown centos:adm /var/nfs
-sudo chmod 775 /var/nfs
-sudo echo '/var/nfs        *(rw,sync,no_subtree_check)' >> /etc/exports
+sudo chmod 777 /var/nfs
+sudo echo '/var/nfs        *(rw,sync,insecure,no_subtree_check,no_root_squash)' >> /etc/exports
 sudo exportfs -a
 mkdir -p /var/nfs/persistent
 

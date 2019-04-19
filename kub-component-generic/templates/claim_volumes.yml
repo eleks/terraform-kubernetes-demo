@@ -1,0 +1,3 @@
+      - name: ${tf_name}
+        persistentVolumeClaim:
+          claimName: ${tf_claim_name}
