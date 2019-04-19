@@ -44,14 +44,9 @@ ssh-keygen -t rsa -f ~/.ssh/deployer-key
 This key you could use to connect bastion server 
 
 ### 2. Define AWS credentials
-Create file `1.auto.tfvars` in your root module (you can use `aws-demo`) with following content:
-```shell
-aws_access_key = "Here put your access_key"
-aws_secret_key = "Here put your secret_key"
-## the following key will be used as a token to access kubernetes api and dashboard. change it!
-kubeapi_token = "1234567890-1234567890-1234567890-1234567890"
-```  
-Actually the file should match `*.auto.tfvars` to be loaded automatically.
+Create file `1.auto.tfvars` in your root module (you can use `aws-demo`). 
+
+The example: [./aws-demo-camunda/1.auto.tfvars.example]
 
 ### 3. Create terraform workspace (dev/stage/prod/...)
 go into the root module directory (for example `aws-demo`) anr un following command

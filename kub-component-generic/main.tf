@@ -29,6 +29,7 @@ variable "claim_volumes" {
   default = [ "default-nfs-claim:/opt/persistent:" ]
 }
 
+variable "env_count"    {} #do not provide default value
 variable "env"     {
   # environment variables
   type = "map"
@@ -47,7 +48,7 @@ output "ports"{
 }
 
 data "template_file" "env" {
-  count    = "${length( keys(var.env) )}"
+  count    = "${var.env_count}"
   template = "${file( "${path.module}/templates/env.yml" )}"
   vars {
     tf_key   = "${ element(keys(var.env),count.index) }"

@@ -16,6 +16,8 @@ module "grafana" {
   cpu_min   = "0.5"
   cpu_max   = "1"
   ports     = "${local.component_ports["grafana"]}"
+
+  env_count = 6  ##need to provide count statically :(
   env = {
     GF_AUTH_BASIC_ENABLED      = "true"
     GF_AUTH_ANONYMOUS_ENABLED  = "false"
@@ -24,6 +26,7 @@ module "grafana" {
     GF_SECURITY_ADMIN_PASSWORD = "${var.tf_grafana_pass}"
     GF_INSTALL_PLUGINS         = "grafana-piechart-panel"
   }
+
   claim_volumes = [
     "default-nfs-claim:/etc/grafana/provisioning/:grafana"
   ]
