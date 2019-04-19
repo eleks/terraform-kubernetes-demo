@@ -22,5 +22,5 @@ module "persistent" {
     tf_mail_pass      = "${var.tf_mail_pass}"
     tf_jira_auth      = "${var.tf_jira_auth}"
   }
-  depends_on = ["${module.kub.ready}"]
+  depends_on = ["${module.kub.ready}","${aws_db_instance.mysql.address}"]
 }

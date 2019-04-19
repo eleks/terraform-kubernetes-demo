@@ -129,7 +129,7 @@ resource "null_resource" "apply" {
   provisioner "remote-exec" "destroy"{
     when = "destroy"
     inline = [
-      ## "echo ${ join(",",var.depends_on) }",    ## just to make the depends_on parameter working
+      "echo ${ join(",",var.depends_on) }",    ## just to make the depends_on parameter working
       "kubectl delete -f /home/${var.ssh_user}/provision/kub-component-${var.namespace}-${var.name}.yml",
       "mv -f /home/${var.ssh_user}/provision/kub-component-${var.namespace}-${var.name}.yml /home/${var.ssh_user}/provision/kub-component-${var.namespace}-${var.name}.yml.bak"
     ]

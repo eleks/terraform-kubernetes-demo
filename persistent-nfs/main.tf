@@ -28,11 +28,11 @@ resource "null_resource" "deploy" {
   provisioner "remote-exec" {
     inline = [
       "echo ${ join(",",var.depends_on) }",    ## just to make the depends_on parameter working
-      "rm -rf ${var.persistent_remote}/*",
-      "rm -rf ${var.persistent_remote}/.??*",
+      "find /var/nfs -type f -delete",         ## delete files and not the folders to keep nfs mount
+      #"rm -rf ${var.persistent_remote}/*",
+      #"rm -rf ${var.persistent_remote}/.??*",
       "unzip -o ${local.remote_zip} -d ${var.persistent_remote}",
       "rm -f ${local.remote_zip}"
-      # "find ${var.persistent_remote} -name *.tft -delete"
     ]
   }
 }

@@ -1,0 +1,28 @@
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: default-nfs-volume
+  namespace: default
+spec:
+  capacity:
+    storage: 4Gi
+  accessModes:
+  - ReadWriteMany
+  nfs:
+    server: bastion.${tf_dns_domain}
+    path: /var/nfs/persistent
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: default-nfs-claim
+  namespace: default
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 2Gi
+  volumeName: default-nfs-volume
+  volumeMode: Filesystem

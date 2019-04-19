@@ -86,16 +86,14 @@ sleep 15
 
 # install flannel network
 kubectl apply -f /home/centos/provision/flannel.yaml
-#rm -f /home/centos/provision/flannel.yaml
-
 # rbac
 kubectl apply -f /home/centos/provision/rbac.yaml
-#rm -f /home/centos/provision/rbac.yaml
+# default persistent storage used for deployment
+kubectl create -f /home/centos/provision/persistent-nfs.yaml
 
 # dashboard + security
 kubectl create -f /home/centos/provision/dashboard.yaml
 sleep 15
-# kubectl delete sa kubernetes-dashboard -n kube-system
 kubectl create -f /home/centos/provision/dashboard-secure.yaml
 
 # restart kubelet

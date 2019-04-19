@@ -123,7 +123,7 @@ resource "null_resource" "bastion_post_init" {
   provisioner "remote-exec" {
     inline = "${var.bastion_post_init}"
   }
-  depends_on=["null_resource.init-bastion","null_resource.init-master"]
+  depends_on=["null_resource.finit-bastion","null_resource.init-master"]
 }
 
 data "template_file" "init-bastion" {

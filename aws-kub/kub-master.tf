@@ -1,5 +1,16 @@
 #--------------------------------------------------------
-#--Create EC2 instances
+#--Create EC2 master instance(s)
+#--------------------------------------------------------
+
+locals {
+  master_templates = [
+    "persistent-nfs.yaml"
+  ]
+  master_templates_vars = {
+    tf_dns_domain = "${var.dns_domain}"
+  }
+}
+
 #--------------------------------------------------------
 #--Masters
 #--------------------------------------------------------
@@ -50,7 +61,7 @@ resource "null_resource" "wait-master" {
   depends_on = [ "aws_instance.master" ]
 }
 
-resource "null_resource" "init-master" {
+resource "null_resource" "provision-master" {
   connection {
     bastion_host= "${aws_instance.bastion.public_ip}"
     type        = "ssh"
@@ -73,18 +84,43 @@ resource "null_resource" "init-master" {
     content       = "${var.kubeapi_token},deployer,1"
     destination   = "/home/centos/provision/auth.csv"
   }
+  depends_on=["null_resource.wait-master"]
+}
 
+resource "null_resource" "master-templates" {
+  count = "${ length(local.master_templates) }"
+
+  connection {
+    bastion_host= "${aws_instance.bastion.public_ip}"
+    type        = "ssh"
+    host        = "master.${var.dns_domain}"
+    user        = "centos"
+    private_key = "${file("${var.key_path_local}${var.key_name}")}"
+  }
+
+  provisioner "file" "template-put" {
+    content       = "${data.template_file.master-templates.*.rendered[count.index]}"
+    #content       = "..."
+    destination   = "/home/centos/provision/${local.master_templates[count.index]}"
+  }
+  depends_on = [ "null_resource.provision-master", "data.template_file.master-templates" ]
+}
+
+resource "null_resource" "init-master" {
+  connection {
+    bastion_host= "${aws_instance.bastion.public_ip}"
+    type        = "ssh"
+    host        = "master.${var.dns_domain}"
+    user        = "centos"
+    private_key = "${file("${var.key_path_local}${var.key_name}")}"
+  }
+  # instance init sh
   provisioner "remote-exec" {
     inline = [
       "${ file( format("%v/provision/init-instance-inline.sh",path.module) ) }"
-      #"set -e",
-      #"chmod +x /home/centos/provision/init-instance.sh",
-      #"LOG_FILE=/home/centos/provision/init-instance.log",
-      #"/home/centos/provision/init-instance.sh &> $LOG_FILE || (>&2 tail -20 $LOG_FILE && exit 1 )" ,
-      #"echo SUCCESS"
     ]
   }
-  depends_on=["null_resource.wait-master"]
+  depends_on=["null_resource.master-templates"]
 }
 
 
@@ -107,7 +143,6 @@ data "template_file" "kubeadm_token" {
   }
 }
 
-
 data "template_file" "init-master" {
   template = "${file("${path.module}/provision/init-master.sh")}"
 
@@ -118,3 +153,13 @@ data "template_file" "init-master" {
     tf_master_ip     = "${element(aws_instance.master.*.private_ip, 0)}"
   }
 }
+
+
+# render templates inside provision/master/
+data "template_file" "master-templates" {
+  count = "${ length(local.master_templates) }"
+  template = "${file( "${path.module}/provision/master/${local.master_templates[count.index]}" )}"
+  vars  = "${local.master_templates_vars}"
+}
+
+

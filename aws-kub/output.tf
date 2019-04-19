@@ -17,7 +17,7 @@ output "hostname" {
 }
 # the `key` that represents that kub is ready
 output "ready" {
-  value = "${kubernetes_persistent_volume_claim.default-nfs-claim.metadata.0.uid}::${module.port-kubeapi.public_port}::${module.port-kubedash.public_port}::${aws_route.internet.id}"
+  value = "${join(":",null_resource.init-master.*.id)}:${null_resource.finit-bastion.id}:${module.port-kubeapi.public_port}::${module.port-kubedash.public_port}::${aws_route.internet.id}"
 }
 
 # use the following to use as default listeners params:
