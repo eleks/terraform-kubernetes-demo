@@ -12,6 +12,10 @@ the simple terraform module set to create kubernetes cluster. could be used for 
 * `persistent-nfs` a simple deployment of artifacts through ssh 
 
 
+## Camunda demo flow
+
+If you are going to check camunda process inside kubernetes check the following document: [./aws-demo-camunda/README.md](./aws-demo-camunda/README.md)
+
 ## Infrastructure Overview  
 ![architecture](assets/integration-platform.jpg)
 
@@ -74,3 +78,4 @@ It is signed with custom CA certificate. So, to make server certificate valid fo
 `certificates/ca.docker.local.cer`
 
 details in [certificates/README.md](./certificates/README.md)
+

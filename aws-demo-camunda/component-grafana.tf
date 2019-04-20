@@ -28,6 +28,7 @@ module "grafana" {
   }
 
   claim_volumes = [
+    ## claim name : folder in docker where to mount claim : subfolder of the claim
     "default-nfs-claim:/etc/grafana/provisioning/:grafana"
   ]
 

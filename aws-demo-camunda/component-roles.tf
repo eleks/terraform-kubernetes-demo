@@ -4,7 +4,7 @@
 
 data "null_data_source" "component_hosts" {
   inputs = {
-    bpm  = "${module.kub.hostname}"
+    bpm      = "${module.kub.hostname}"
     grafana  = "${module.kub.hostname}"
   }
 }
