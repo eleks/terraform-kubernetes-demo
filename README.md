@@ -4,13 +4,14 @@ the simple terraform module set to create kubernetes cluster. could be used for 
 
 ## Modules Overview
 
-* `aws-demo` a demo module that uses others
+* `aws-demo-camunda` a demo module that uses others
 * `aws-kub`  a module to create simple kubernetes cluster based on amazon virtual machines
 * `aws-listener` exposes public port
+* `bastion-sh` executes shell script from bastion
 * `certificates` initializes demo certificates
-* `kub-component-java-base` creates a kubernetes deployment and service for a java-based project
-* `persistent-nfs` a simple deployment of artifacts through ssh 
-
+* `kub-component-generic` the generic kub component deployment based on templates
+* `kub-component-java-base` creates a kubernetes deployment and service for a java-based specific images
+* `persistent-nfs` a simple deployment of artifacts through ssh/bastion 
 
 ## Camunda demo flow
 
