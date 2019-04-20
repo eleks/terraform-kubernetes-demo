@@ -73,9 +73,9 @@ terraform apply
 ### 6. Certificate  
 
 We are using self-signed certificate  for Application LoadBalancer.
-It is signed with custom CA certificate. So, to make server certificate valid for your brawser/mobile import the following file into the truststore:
+It is signed with custom CA certificate. So, to make server certificate valid for your brawser/mobile import the following certificate into the truststore:
 
-`certificates/ca.docker.local.cer`
+[certificates/ca.docker.local.cer](certificates/ca.docker.local.cer)
 
 details in [certificates/README.md](./certificates/README.md)
 
