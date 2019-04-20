@@ -46,9 +46,9 @@ rest {
                 body = [
                     fields: [
                         project: [id: "10001" ],
+                        issuetype:[ id: "10001" ],
                         summary: _summary,
                         description: _description,
-                        issuetype:[ id: "10001" ]
                     ],
                 ]
             }

@@ -30,7 +30,7 @@ the simple terraform module set to create kubernetes cluster. could be used for 
 **Download terraform**
 https://www.terraform.io/downloads.html
 
-The terraform configs created for the version 0.11.x
+The terraform configs created for the version 0.11.13+
 
 ### 1. Generate your deployer key pair:  
 go into the project root directory and generate the deployer-key and public ssh cert
@@ -44,15 +44,15 @@ ssh-keygen -t rsa -f ~/.ssh/deployer-key
 This key you could use to connect bastion server 
 
 ### 2. Define AWS credentials
-Create file `1.auto.tfvars` in your root module (you can use `aws-demo`). 
+Create file `1.auto.tfvars` in your root module (in our case `aws-demo-camunda`). 
 
-The example: [./aws-demo-camunda/1.auto.tfvars.example]
+The example: [./aws-demo-camunda/1.auto.tfvars.example](./aws-demo-camunda/1.auto.tfvars.example)
 
 ### 3. Create terraform workspace (dev/stage/prod/...)
-go into the root module directory (for example `aws-demo`) anr un following command
+go into the root module directory (example `aws-demo-camunda`) and run the following command
 ```shell
-cd aws-demo
-terraform workspace new dev
+cd aws-demo-camunda
+terraform workspace new bpm-demo
 ```
 
 ### 4. Initialize terraform for current configuration
