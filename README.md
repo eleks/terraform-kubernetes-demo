@@ -18,7 +18,7 @@ the simple terraform module set to create kubernetes cluster. could be used for 
 If you are going to check camunda process inside kubernetes check the following document: [./aws-demo-camunda/README.md](./aws-demo-camunda/README.md)
 
 ## Infrastructure Overview  
-![architecture](assets/integration-platform.jpg)
+![architecture](assets/aws-demo-camunda.png)
 
 
 **NOTE:** the following instruction works under linux and windows
