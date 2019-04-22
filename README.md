@@ -13,9 +13,9 @@ the simple terraform module set to create kubernetes cluster. could be used for 
 * `kub-component-java-base` creates a kubernetes deployment and service for a java-based specific images
 * `persistent-nfs` a simple deployment of artifacts through ssh/bastion 
 
-## Camunda demo flow
+## Camunda demo process
 
-If you are going to check camunda process inside kubernetes check the following document: [./aws-demo-camunda/README.md](./aws-demo-camunda/README.md)
+If you are going to execute camunda business process inside kubernetes check the following instructions: [./aws-demo-camunda/README.md](./aws-demo-camunda/README.md)
 
 ## Infrastructure Overview  
 ![architecture](assets/aws-demo-camunda.png)
