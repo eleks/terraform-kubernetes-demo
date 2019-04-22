@@ -22,10 +22,6 @@ module "kub" {
   ]
 }
 
-# get default params for port listeners defined inside kub module
-data "null_data_source" "default_port_params" {
-  inputs = "${ zipmap(module.kub.default_port_keys, module.kub.default_port_values) }"
-}
 
 output "bastion-ip" {
   value = "${module.kub.bastion-ip}"

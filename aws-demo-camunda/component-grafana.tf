@@ -42,7 +42,7 @@ module "port-grafana-https" {
   source          = "../aws-listener"
   port            = "https"
   ports           = "${local.component_ports["grafana"]}"
-  params          = "${ data.null_data_source.default_port_params.outputs }"
+  params          = "${ module.kub.default_port_params }"
 }
 
 output "component-grafana" {

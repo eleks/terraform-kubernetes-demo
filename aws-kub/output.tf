@@ -20,13 +20,8 @@ output "ready" {
   value = "${join(":",null_resource.init-master.*.id)}:${null_resource.finit-bastion.id}:${module.port-kubeapi.public_port}::${module.port-kubedash.public_port}::${aws_route.internet.id}"
 }
 
-# use the following to use as default listeners params:
-# to combine it back to map use:
-# zipmap(module.kub.default_port_keys, module.kub.default_port_values)
-output "default_port_keys" {
-  value = "${ keys(data.null_data_source.default_port_params.outputs) }"
-}
-output "default_port_values" {
-  value = "${ values(data.null_data_source.default_port_params.outputs) }"
+# use the following as default params to create public listeners:
+output "default_port_params" {
+  value = "${data.null_data_source.default_port_params.outputs}"
 }
 

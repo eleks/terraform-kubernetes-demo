@@ -26,7 +26,7 @@ module "port-bpm-http" {
   source          = "../aws-listener"
   port            = "http"
   ports           = "${local.component_ports["bpm"]}"
-  params          = "${ data.null_data_source.default_port_params.outputs }"
+  params          = "${ module.kub.default_port_params }"
 }
 
 output "component-bpm" {
