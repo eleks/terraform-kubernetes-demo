@@ -1,0 +1,3 @@
+email.mail.pass        = "****************"
+database.demo.password = "demo"
+rest.jira.auth         = "Basic ***********************"

@@ -1,0 +1,687 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bioc="http://bpmn.io/schema/bpmn/biocolor/1.0" id="Definitions_1lhsr75" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.0.1">
+  <bpmn:collaboration id="Collaboration_0my45du">
+    <bpmn:participant id="Participant_0jjc4bq" name="Business Trip" processRef="BusinessTrip" />
+  </bpmn:collaboration>
+  <bpmn:process id="BusinessTrip" name="Business Trip" isExecutable="true" camunda:candidateStarterGroups="Employees">
+    <bpmn:laneSet id="LaneSet_04jl9gb">
+      <bpmn:lane id="Lane_0s6eyos" name="Project Manager">
+        <bpmn:flowNodeRef>Task_0zgs6t0</bpmn:flowNodeRef>
+        <bpmn:childLaneSet id="LaneSet_0gt5afu" />
+      </bpmn:lane>
+      <bpmn:lane id="Lane_1yygrvp" name="Trip Manager">
+        <bpmn:flowNodeRef>Task_02pl4su</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_06b076y</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_01u1x5y" name="Auto">
+        <bpmn:flowNodeRef>Task_0m7fxre</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_0abzsah</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_1cqfale</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_1fsb47l</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>ScriptTask_0occw7y</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_0v82qhu</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_1uk7qbc</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_0xgy8jg</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_1kp0jf7</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_065lnel" name="Employee">
+        <bpmn:flowNodeRef>Task_1hoq4r6</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>StartEvent_1</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>EndEvent_1djcxo9</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_02nrwyr" name="Financial Monitoring">
+        <bpmn:flowNodeRef>Task_0phu4yg</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:scriptTask id="Task_0m7fxre" name="update jira with budget" scriptFormat="groovy">
+      <bpmn:incoming>SequenceFlow_1xayheg</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_046li36</bpmn:outgoing>
+      <bpmn:script>def j = REST.jira.comment(JiraKey, TripInfoBudget)
+REST.jira.toStatus(JiraKey, "In Progress")
+
+</bpmn:script>
+    </bpmn:scriptTask>
+    <bpmn:userTask id="Task_1hoq4r6" name="report spends" camunda:assignee="${EmployeeId}">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="TripId" label="TripId" type="string">
+            <camunda:validation>
+              <camunda:constraint name="readonly" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="TripTitle" type="string">
+            <camunda:validation>
+              <camunda:constraint name="readonly" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="EmployeeId" label="Employee" type="string">
+            <camunda:validation>
+              <camunda:constraint name="readonly" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="EmployeeMail" label="Employee Email" type="string">
+            <camunda:validation>
+              <camunda:constraint name="readonly" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="ProjectManagerId" label="Project Manager" type="string">
+            <camunda:validation>
+              <camunda:constraint name="readonly" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="TripStart" label="Trip Start" type="date">
+            <camunda:validation>
+              <camunda:constraint name="readonly" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="TripDays" label="Trip Days" type="long">
+            <camunda:validation>
+              <camunda:constraint name="readonly" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="JiraLink" label="Jira Link" type="string">
+            <camunda:validation>
+              <camunda:constraint name="readonly" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="TicketsPrice" label="Tickets Price" type="long">
+            <camunda:validation>
+              <camunda:constraint name="readonly" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="AccomodationPrice" label="Accomodation" type="long">
+            <camunda:validation>
+              <camunda:constraint name="readonly" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="DaylyExpences" label="Planned Dayly Expenses (for all days)" type="long">
+            <camunda:validation>
+              <camunda:constraint name="readonly" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="SpendType" label="Type" type="enum">
+            <camunda:validation>
+              <camunda:constraint name="required" />
+            </camunda:validation>
+            <camunda:value id="Meal" name="Meal" />
+            <camunda:value id="Transport" name="Transport" />
+            <camunda:value id="Other" name="Other" />
+          </camunda:formField>
+          <camunda:formField id="SpendAmount" label="Amount" type="long">
+            <camunda:validation>
+              <camunda:constraint name="required" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="SpendInfo" label="Comments" type="string" />
+          <camunda:formField id="SpendScan" label="Link to Scan-copy" type="string" />
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_1ns1kn2</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_0k4oeh0</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0dmw5n1</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="SequenceFlow_0bzfr89" sourceRef="Task_0abzsah" targetRef="Task_1cqfale" />
+    <bpmn:sequenceFlow id="SequenceFlow_0hh7u1p" sourceRef="Task_1cqfale" targetRef="Task_02pl4su" />
+    <bpmn:sequenceFlow id="SequenceFlow_1psb2uq" sourceRef="StartEvent_1" targetRef="Task_0abzsah" />
+    <bpmn:sequenceFlow id="SequenceFlow_1pkiknd" sourceRef="Task_02pl4su" targetRef="Task_1fsb47l" />
+    <bpmn:sequenceFlow id="SequenceFlow_1xayheg" name="Approved" sourceRef="Task_0zgs6t0" targetRef="Task_0m7fxre">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression" language="groovy">Status=='Approved'</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="SequenceFlow_046li36" sourceRef="Task_0m7fxre" targetRef="Task_06b076y" />
+    <bpmn:sequenceFlow id="SequenceFlow_1ns1kn2" sourceRef="Task_06b076y" targetRef="Task_1hoq4r6" />
+    <bpmn:sequenceFlow id="SequenceFlow_0dmw5n1" sourceRef="Task_1hoq4r6" targetRef="Task_0v82qhu" />
+    <bpmn:sequenceFlow id="SequenceFlow_0k4oeh0" name="Rejected" sourceRef="Task_0phu4yg" targetRef="Task_1hoq4r6" />
+    <bpmn:sequenceFlow id="SequenceFlow_1yu9irh" sourceRef="Task_0v82qhu" targetRef="Task_1uk7qbc" />
+    <bpmn:sequenceFlow id="SequenceFlow_1vkctq7" name="exceptions?" sourceRef="Task_1uk7qbc" targetRef="Task_0phu4yg">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression" language="groovy">false</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="SequenceFlow_1b6aqx9" name="Approved" sourceRef="Task_0phu4yg" targetRef="Task_0xgy8jg">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression" language="groovy">true</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="SequenceFlow_0gq073p" sourceRef="Task_1uk7qbc" targetRef="Task_0xgy8jg" />
+    <bpmn:sequenceFlow id="SequenceFlow_0uu64v0" sourceRef="Task_1kp0jf7" targetRef="ScriptTask_0occw7y" />
+    <bpmn:sequenceFlow id="SequenceFlow_0mzc05z" sourceRef="ScriptTask_0occw7y" targetRef="EndEvent_1djcxo9" />
+    <bpmn:sequenceFlow id="SequenceFlow_106x9kh" name="Rejected" sourceRef="Task_0zgs6t0" targetRef="Task_1kp0jf7" />
+    <bpmn:scriptTask id="Task_0abzsah" name="init flow" scriptFormat="groovy">
+      <bpmn:documentation>insert into trip_report_information (trip_address , trip_purpose , trip_id , employee_id)
+values ( :TripAddress, :TripPurpose, :TripId, :EmployeeId )
+/
+</bpmn:documentation>
+      <bpmn:incoming>SequenceFlow_1psb2uq</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0bzfr89</bpmn:outgoing>
+      <bpmn:script>def user = CAMUNDA.currentUser()
+def uuid = "trip-"+Long.toHexString(UUID.randomUUID().getMostSignificantBits())
+
+execution.setVariable( "EmployeeId", user.getId() )
+execution.setVariable( "EmployeeMail", user.getEmail() )
+execution.setVariable( "TripId", uuid )
+execution.setVariable( "Status", "Approved" )
+execution.setVariable( "SpendAmount", 0 )
+execution.setVariable( "TripTitle", TripPurpose +" at "+TripAddress )
+
+SQL.execute('demo',CAMUNDA.doc())</bpmn:script>
+    </bpmn:scriptTask>
+    <bpmn:startEvent id="StartEvent_1" name="Request Started">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="TripAddress" label="Where to go, Address" type="string">
+            <camunda:validation>
+              <camunda:constraint name="required" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="TripPurpose" label="Purpose" type="string">
+            <camunda:validation>
+              <camunda:constraint name="required" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="ProjectManagerId" label="Project Manager" type="string" defaultValue="prjman" />
+          <camunda:formField id="TripStart" label="Start Date" type="date">
+            <camunda:validation>
+              <camunda:constraint name="required" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="TripDays" label="Number of Days" type="long" defaultValue="5" />
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:outgoing>SequenceFlow_1psb2uq</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:scriptTask id="Task_1cqfale" name="register jira issue" scriptFormat="groovy">
+      <bpmn:documentation>Busines trip # ${TripId}
+
+Employee: ${EmployeeMail}
+Where: ${TripAddress}
+Purpose: ${TripPurpose}
+Project Manager: ${ CAMUNDA.user(ProjectManagerId).getEmail() }
+Start: ${TripStart}
+Days: ${TripDays}</bpmn:documentation>
+      <bpmn:incoming>SequenceFlow_0bzfr89</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0hh7u1p</bpmn:outgoing>
+      <bpmn:script>def tripInfo = TEMPLATE.doc() //generate from documentation
+def j = REST.jira.tripRegister("$TripId: $TripTitle", tripInfo)
+def base = "https://jiravm.atlassian.net/browse/"
+//store result into variables
+tripInfo += "\n" + base+j.key 
+execution.setVariable( "TripInfoMain", tripInfo )
+execution.setVariable( "JiraLink", base+j.key )
+execution.setVariable( "JiraKey", j.key )</bpmn:script>
+    </bpmn:scriptTask>
+    <bpmn:sequenceFlow id="SequenceFlow_041539i" sourceRef="Task_1fsb47l" targetRef="Task_0zgs6t0" />
+    <bpmn:userTask id="Task_02pl4su" name="provide&#10;budget" camunda:candidateGroups="TripManagers">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="TripId" label="TripId" type="string">
+            <camunda:validation>
+              <camunda:constraint name="readonly" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="TripTitle" type="string">
+            <camunda:validation>
+              <camunda:constraint name="readonly" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="EmployeeId" label="Employee" type="string">
+            <camunda:validation>
+              <camunda:constraint name="readonly" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="EmployeeMail" label="Employee Email" type="string">
+            <camunda:validation>
+              <camunda:constraint name="readonly" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="ProjectManagerId" label="Project Manager" type="string">
+            <camunda:validation>
+              <camunda:constraint name="readonly" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="TripStart" label="Trip Start" type="date">
+            <camunda:validation>
+              <camunda:constraint name="readonly" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="TripDays" label="Trip Days" type="long">
+            <camunda:validation>
+              <camunda:constraint name="readonly" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="JiraLink" label="Jira Link" type="string">
+            <camunda:validation>
+              <camunda:constraint name="readonly" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="TicketsPrice" label="Tickets Price, $" type="long">
+            <camunda:validation>
+              <camunda:constraint name="required" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="AccomodationPrice" label="Accomodation Price, $" type="long">
+            <camunda:validation>
+              <camunda:constraint name="required" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="DaylyExpences" label="Dayly Expences, Total $  (for all days)" type="long" defaultValue="${ TripDays * 100 }" />
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_0hh7u1p</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1pkiknd</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:scriptTask id="Task_1fsb47l" name="notify project manager" scriptFormat="groovy">
+      <bpmn:documentation>Budget: 
+
+Tickets Price: ${TicketsPrice}  
+Accomodation Price: ${AccomodationPrice}  
+Dayly Expences (${TripDays} days): ${DaylyExpences}  
+
+Total: ${ TicketsPrice + AccomodationPrice + DaylyExpences }</bpmn:documentation>
+      <bpmn:incoming>SequenceFlow_1pkiknd</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_041539i</bpmn:outgoing>
+      <bpmn:script>def budget = TEMPLATE.doc()
+
+EMAIL.send(
+  to: CAMUNDA.user(ProjectManagerId).getEmail(),
+  subject: "${TripId}: ${TripPurpose}",
+  body: TripInfoMain + "\n\n" + budget
+)
+
+execution.setVariable( "TripInfoBudget", budget )</bpmn:script>
+    </bpmn:scriptTask>
+    <bpmn:endEvent id="EndEvent_1djcxo9" name="Request Finalized">
+      <bpmn:incoming>SequenceFlow_0mzc05z</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:scriptTask id="ScriptTask_0occw7y" name="notify employee" scriptFormat="groovy">
+      <bpmn:incoming>SequenceFlow_0uu64v0</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0mzc05z</bpmn:outgoing>
+      <bpmn:script>EMAIL.send(
+  to: EmployeeMail,
+  subject: "${TripId}: ${TripTitle} &gt;&gt; $Status",
+  body: TripInfoStatus +"\n\n\n"+ TripInfoMain + "\n\n\n" + TripInfoBudget
+)</bpmn:script>
+    </bpmn:scriptTask>
+    <bpmn:sequenceFlow id="SequenceFlow_12rovds" sourceRef="Task_0xgy8jg" targetRef="Task_1kp0jf7" />
+    <bpmn:scriptTask id="Task_0v82qhu" name="calculate spends" default="SequenceFlow_1yu9irh" scriptFormat="groovy">
+      <bpmn:incoming>SequenceFlow_0dmw5n1</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1yu9irh</bpmn:outgoing>
+      <bpmn:outgoing>SequenceFlow_1xko812</bpmn:outgoing>
+      <bpmn:script>println "TODO"</bpmn:script>
+    </bpmn:scriptTask>
+    <bpmn:scriptTask id="Task_1uk7qbc" name="fraud detection" default="SequenceFlow_0gq073p" scriptFormat="groovy">
+      <bpmn:incoming>SequenceFlow_1yu9irh</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1vkctq7</bpmn:outgoing>
+      <bpmn:outgoing>SequenceFlow_0gq073p</bpmn:outgoing>
+      <bpmn:script>println "TODO"
+</bpmn:script>
+    </bpmn:scriptTask>
+    <bpmn:scriptTask id="Task_0xgy8jg" name="report financial system" scriptFormat="groovy">
+      <bpmn:documentation>insert into payments (payment_type, trip_id , payment, employee_id)
+values ( "Tickets", :TripId, :TicketsPrice, :EmployeeId )
+/
+
+insert into payments (payment_type, trip_id , payment, employee_id)
+values ( "Accomodation", :TripId, :AccomodationPrice, :EmployeeId )
+/
+
+insert into payments (payment_type, trip_id , payment, employee_id)
+values ( "Spends", :TripId, :SpendAmount, :EmployeeId )
+/</bpmn:documentation>
+      <bpmn:incoming>SequenceFlow_0gq073p</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_1b6aqx9</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_12rovds</bpmn:outgoing>
+      <bpmn:script>SQL.execute('demo', CAMUNDA.doc())</bpmn:script>
+    </bpmn:scriptTask>
+    <bpmn:scriptTask id="Task_1kp0jf7" name="update jira" scriptFormat="groovy">
+      <bpmn:documentation>Planned Dayly Spends: ${DaylyExpences} 
+Real Dayly Spends: ${SpendAmount}
+
+Status: ${Status}</bpmn:documentation>
+      <bpmn:incoming>SequenceFlow_106x9kh</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_12rovds</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0uu64v0</bpmn:outgoing>
+      <bpmn:script>def info = TEMPLATE.doc()
+def j = REST.jira.comment(JiraKey, info)
+REST.jira.toStatus(JiraKey, "done")
+execution.setVariable( "TripInfoStatus", info)
+
+SQL.execute('demo', '''
+  insert into trip_approve (trip_id, trip_status , employee_id)
+  values (  :TripId, :Status, :EmployeeId )
+''')
+</bpmn:script>
+    </bpmn:scriptTask>
+    <bpmn:userTask id="Task_0phu4yg" name="exception&#10;approve" default="SequenceFlow_0k4oeh0" camunda:assignee="finmon" camunda:candidateGroups="FinancialMonitoring">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="OverspendingApproved" label="Please approve overspending:" type="boolean" defaultValue="false" />
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_1vkctq7</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_1xko812</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0k4oeh0</bpmn:outgoing>
+      <bpmn:outgoing>SequenceFlow_1b6aqx9</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Task_0zgs6t0" name="approve&#10;budget" default="SequenceFlow_106x9kh" camunda:assignee="${ProjectManagerId}" camunda:candidateGroups="ProjectManagers">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="TripId" label="TripId" type="string">
+            <camunda:validation>
+              <camunda:constraint name="readonly" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="TripTitle" type="string">
+            <camunda:validation>
+              <camunda:constraint name="readonly" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="EmployeeId" label="Employee" type="string">
+            <camunda:validation>
+              <camunda:constraint name="readonly" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="EmployeeMail" label="Employee Email" type="string">
+            <camunda:validation>
+              <camunda:constraint name="readonly" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="ProjectManagerId" label="Project Manager" type="string">
+            <camunda:validation>
+              <camunda:constraint name="readonly" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="TripStart" label="Trip Start" type="date">
+            <camunda:validation>
+              <camunda:constraint name="readonly" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="TripDays" label="Trip Days" type="long">
+            <camunda:validation>
+              <camunda:constraint name="readonly" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="JiraLink" label="Jira Link" type="string">
+            <camunda:validation>
+              <camunda:constraint name="readonly" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="TicketsPrice" label="Tickets Price" type="long">
+            <camunda:validation>
+              <camunda:constraint name="readonly" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="AccomodationPrice" label="Accomodation" type="long">
+            <camunda:validation>
+              <camunda:constraint name="readonly" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="DaylyExpences" label="Planned Dayly Expenses (for all days)" type="long">
+            <camunda:validation>
+              <camunda:constraint name="readonly" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="TotalBudget" label="Total Budget" type="long" defaultValue="${ TicketsPrice+AccomodationPrice+DaylyExpences}">
+            <camunda:validation>
+              <camunda:constraint name="readonly" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="Status" label="Input Reject Reason or `Approved` if everything is ok" type="string" defaultValue="${Status}">
+            <camunda:validation>
+              <camunda:constraint name="minlength" config="8" />
+            </camunda:validation>
+          </camunda:formField>
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_041539i</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1xayheg</bpmn:outgoing>
+      <bpmn:outgoing>SequenceFlow_106x9kh</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Task_06b076y" name="provide tickets and reservation" camunda:candidateGroups="TripManagers">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="TripId" label="TripId" type="string">
+            <camunda:validation>
+              <camunda:constraint name="readonly" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="TripTitle" type="string">
+            <camunda:validation>
+              <camunda:constraint name="readonly" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="EmployeeId" label="Employee" type="string">
+            <camunda:validation>
+              <camunda:constraint name="readonly" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="EmployeeMail" label="Employee Email" type="string">
+            <camunda:validation>
+              <camunda:constraint name="readonly" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="ProjectManagerId" label="Project Manager" type="string">
+            <camunda:validation>
+              <camunda:constraint name="readonly" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="TripStart" label="Trip Start" type="date">
+            <camunda:validation>
+              <camunda:constraint name="readonly" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="TripDays" label="Trip Days" type="long">
+            <camunda:validation>
+              <camunda:constraint name="readonly" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="JiraLink" label="Jira Link" type="string">
+            <camunda:validation>
+              <camunda:constraint name="readonly" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="TicketsPrice" label="Tickets Price" type="long">
+            <camunda:validation>
+              <camunda:constraint name="readonly" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="AccomodationPrice" label="Accomodation" type="long">
+            <camunda:validation>
+              <camunda:constraint name="readonly" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="DaylyExpences" label="Planned Dayly Expenses (for all days)" type="long">
+            <camunda:validation>
+              <camunda:constraint name="readonly" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="TripDetails" label="Ticket and Accomodation Details" type="string" />
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_046li36</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1ns1kn2</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="SequenceFlow_1xko812" name="overspend?" sourceRef="Task_0v82qhu" targetRef="Task_0phu4yg">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression" language="groovy">SpendAmount &gt; DaylyExpences</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_0my45du">
+      <bpmndi:BPMNShape id="Participant_0jjc4bq_di" bpmnElement="Participant_0jjc4bq" isHorizontal="true">
+        <dc:Bounds x="156" y="78" width="1464" height="742" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1" bioc:stroke="rgb(67, 160, 71)" bioc:fill="rgb(200, 230, 201)">
+        <dc:Bounds x="251" y="297" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="230" y="274" width="80" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="UserTask_1f8jrbe_di" bpmnElement="Task_1hoq4r6" bioc:stroke="rgb(67, 160, 71)" bioc:fill="rgb(200, 230, 201)">
+        <dc:Bounds x="795" y="275" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="UserTask_1gczii5_di" bpmnElement="Task_0phu4yg" bioc:stroke="rgb(229, 57, 53)" bioc:fill="rgb(255, 205, 210)">
+        <dc:Bounds x="1057" y="117" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="UserTask_1gyhq69_di" bpmnElement="Task_02pl4su" bioc:stroke="rgb(142, 36, 170)" bioc:fill="rgb(225, 190, 231)">
+        <dc:Bounds x="482" y="593" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ScriptTask_0eh521p_di" bpmnElement="Task_0abzsah">
+        <dc:Bounds x="219" y="444" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0hh7u1p_di" bpmnElement="SequenceFlow_0hh7u1p">
+        <di:waypoint x="400" y="524" />
+        <di:waypoint x="400" y="633" />
+        <di:waypoint x="482" y="633" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1psb2uq_di" bpmnElement="SequenceFlow_1psb2uq">
+        <di:waypoint x="269" y="333" />
+        <di:waypoint x="269" y="444" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0bzfr89_di" bpmnElement="SequenceFlow_0bzfr89">
+        <di:waypoint x="319" y="484" />
+        <di:waypoint x="350" y="484" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ScriptTask_12je5c6_di" bpmnElement="Task_1cqfale">
+        <dc:Bounds x="350" y="444" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_0s6eyos_di" bpmnElement="Lane_0s6eyos" isHorizontal="true">
+        <dc:Bounds x="186" y="695" width="1434" height="125" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="UserTask_1lsl137_di" bpmnElement="Task_0zgs6t0" bioc:stroke="rgb(30, 136, 229)" bioc:fill="rgb(187, 222, 251)">
+        <dc:Bounds x="644" y="710" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_1pkiknd_di" bpmnElement="SequenceFlow_1pkiknd">
+        <di:waypoint x="532" y="593" />
+        <di:waypoint x="532" y="524" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1xayheg_di" bpmnElement="SequenceFlow_1xayheg">
+        <di:waypoint x="694" y="710" />
+        <di:waypoint x="694" y="524" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="634" y="615" width="47" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ScriptTask_1bu2lrx_di" bpmnElement="Task_0m7fxre">
+        <dc:Bounds x="644" y="444" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="UserTask_0fhv4aa_di" bpmnElement="Task_06b076y" bioc:stroke="rgb(142, 36, 170)" bioc:fill="rgb(225, 190, 231)">
+        <dc:Bounds x="795" y="596" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_046li36_di" bpmnElement="SequenceFlow_046li36">
+        <di:waypoint x="744" y="484" />
+        <di:waypoint x="768" y="484" />
+        <di:waypoint x="768" y="636" />
+        <di:waypoint x="795" y="636" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1ns1kn2_di" bpmnElement="SequenceFlow_1ns1kn2">
+        <di:waypoint x="845" y="596" />
+        <di:waypoint x="845" y="355" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0dmw5n1_di" bpmnElement="SequenceFlow_0dmw5n1">
+        <di:waypoint x="895" y="315" />
+        <di:waypoint x="947" y="315" />
+        <di:waypoint x="947" y="444" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="905" y="289" width="40" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0k4oeh0_di" bpmnElement="SequenceFlow_0k4oeh0">
+        <di:waypoint x="1057" y="157" />
+        <di:waypoint x="845" y="157" />
+        <di:waypoint x="845" y="275" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="931" y="139" width="44" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ScriptTask_1xjxxjn_di" bpmnElement="Task_0v82qhu">
+        <dc:Bounds x="897" y="444" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_1yu9irh_di" bpmnElement="SequenceFlow_1yu9irh">
+        <di:waypoint x="997" y="484" />
+        <di:waypoint x="1057" y="484" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ScriptTask_0t6e8aw_di" bpmnElement="Task_1uk7qbc">
+        <dc:Bounds x="1057" y="444" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_1vkctq7_di" bpmnElement="SequenceFlow_1vkctq7">
+        <di:waypoint x="1107" y="444" />
+        <di:waypoint x="1107" y="197" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1116" y="373" width="59" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ScriptTask_0xh8grf_di" bpmnElement="Task_1kp0jf7">
+        <dc:Bounds x="1359" y="444" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ScriptTask_0occw7y_di" bpmnElement="ScriptTask_0occw7y">
+        <dc:Bounds x="1505" y="444" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_1b6aqx9_di" bpmnElement="SequenceFlow_1b6aqx9">
+        <di:waypoint x="1157" y="157" />
+        <di:waypoint x="1260" y="157" />
+        <di:waypoint x="1260" y="444" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1185" y="139" width="47" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0gq073p_di" bpmnElement="SequenceFlow_0gq073p">
+        <di:waypoint x="1157" y="484" />
+        <di:waypoint x="1210" y="484" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0uu64v0_di" bpmnElement="SequenceFlow_0uu64v0">
+        <di:waypoint x="1459" y="484" />
+        <di:waypoint x="1505" y="484" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0mzc05z_di" bpmnElement="SequenceFlow_0mzc05z">
+        <di:waypoint x="1555" y="444" />
+        <di:waypoint x="1555" y="333" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="EndEvent_02yahyh_di" bpmnElement="EndEvent_1djcxo9">
+        <dc:Bounds x="1537" y="297" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1512" y="273" width="89" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_1yygrvp_di" bpmnElement="Lane_1yygrvp" isHorizontal="true">
+        <dc:Bounds x="186" y="561" width="1434" height="134" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_01u1x5y_di" bpmnElement="Lane_01u1x5y" isHorizontal="true" bioc:stroke="rgb(67, 160, 71)" bioc:fill="rgb(200, 230, 201)">
+        <dc:Bounds x="186" y="401" width="1434" height="160" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_065lnel_di" bpmnElement="Lane_065lnel" isHorizontal="true">
+        <dc:Bounds x="186" y="235" width="1434" height="166" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_02nrwyr_di" bpmnElement="Lane_02nrwyr" isHorizontal="true">
+        <dc:Bounds x="186" y="78" width="1434" height="157" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_106x9kh_di" bpmnElement="SequenceFlow_106x9kh">
+        <di:waypoint x="744" y="750" />
+        <di:waypoint x="1409" y="750" />
+        <di:waypoint x="1409" y="524" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1056" y="732" width="44" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ScriptTask_0fr8p45_di" bpmnElement="Task_1fsb47l">
+        <dc:Bounds x="482" y="444" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_041539i_di" bpmnElement="SequenceFlow_041539i">
+        <di:waypoint x="582" y="484" />
+        <di:waypoint x="619" y="484" />
+        <di:waypoint x="619" y="750" />
+        <di:waypoint x="644" y="750" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_12rovds_di" bpmnElement="SequenceFlow_12rovds">
+        <di:waypoint x="1310" y="484" />
+        <di:waypoint x="1359" y="484" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ScriptTask_0vtm54t_di" bpmnElement="Task_0xgy8jg">
+        <dc:Bounds x="1210" y="444" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_1xko812_di" bpmnElement="SequenceFlow_1xko812">
+        <di:waypoint x="995" y="448" />
+        <di:waypoint x="1027" y="425" />
+        <di:waypoint x="1027" y="211" />
+        <di:waypoint x="1058" y="190" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1033" y="306" width="58" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
