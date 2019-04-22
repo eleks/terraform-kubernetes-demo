@@ -126,6 +126,18 @@ resource "null_resource" "apply" {
     ]
   }
 
+}
+
+
+resource "null_resource" "destroy" {
+  count = "1"
+  connection {
+    type        = "ssh"
+    host        = "${var.ssh_host}"
+    user        = "${var.ssh_user}"
+    private_key = "${file("${var.key_path_local}${var.key_name}")}"
+  }
+
   provisioner "remote-exec" "destroy"{
     when = "destroy"
     inline = [
@@ -135,4 +147,3 @@ resource "null_resource" "apply" {
     ]
   }
 }
-
