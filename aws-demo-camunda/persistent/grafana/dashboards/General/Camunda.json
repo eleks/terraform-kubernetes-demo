@@ -163,6 +163,7 @@
         "y": 0
       },
       "id": 1,
+      "interval": "",
       "legend": {
         "alignAsTable": false,
         "avg": false,
@@ -213,7 +214,7 @@
           "orderByTime": "ASC",
           "policy": "default",
           "rawQuery": true,
-          "rawSql": "SELECT NAME_ name, unix_timestamp(START_TIME_) time_sec, 0 is_end FROM ACT_HI_TASKINST \nWHERE $__timeFilter(START_TIME_)\nUNION ALL\nSELECT NAME_ name, unix_timestamp(END_TIME_) time_sec, 1 is_end FROM ACT_HI_TASKINST \nWHERE $__timeFilter(END_TIME_)\norder by 2,3\n",
+          "rawSql": "SELECT 'action start ' name, unix_timestamp(START_TIME_) time_sec, 1 is_end FROM ACT_HI_TASKINST \nWHERE $__timeFilter(START_TIME_)\n\n",
           "refId": "A",
           "resultFormat": "time_series",
           "select": [
@@ -232,6 +233,35 @@
           ],
           "tags": [],
           "timeColumn": "time",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        },
+        {
+          "format": "time_series",
+          "group": [],
+          "hide": false,
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT 'action end' name, unix_timestamp(END_TIME_) time_sec, 1 is_end FROM ACT_HI_TASKINST \nWHERE $__timeFilter(END_TIME_)",
+          "refId": "B",
+          "select": [
+            [
+              {
+                "params": [
+                  "REV_"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "table": "ACT_GE_BYTEARRAY",
+          "timeColumn": "CREATE_TIME_",
+          "timeColumnType": "timestamp",
           "where": [
             {
               "name": "$__timeFilter",
@@ -377,7 +407,7 @@
           "hide": false,
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "SELECT\n  COUNT(successful) as value\nFROM summary\nWHERE $__timeFilter(closure_datetime) AND successful = 1",
+          "rawSql": "SELECT\n  COUNT(*) as value\nFROM trip_approve\nWHERE $__timeFilter(closure_datetime) AND trip_status = \"Approved\"",
           "refId": "A",
           "select": [
             [
@@ -400,7 +430,7 @@
         }
       ],
       "thresholds": "",
-      "title": "Successful Engagements Count",
+      "title": "Approved Trips Count",
       "type": "singlestat",
       "valueFontSize": "200%",
       "valueMaps": [
@@ -417,15 +447,15 @@
       "colorBackground": false,
       "colorValue": false,
       "colors": [
-        "#64b0c8",
-        "#64b0c8",
-        "#64b0c8"
+        "#C4162A",
+        "#E0B400",
+        "#37872D"
       ],
       "datasource": "camunda_demo",
       "decimals": null,
       "format": "percentunit",
       "gauge": {
-        "maxValue": 100,
+        "maxValue": 1,
         "minValue": 0,
         "show": true,
         "thresholdLabels": false,
@@ -480,7 +510,7 @@
           "hide": false,
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "SELECT\n   (sum(successful) / (SELECT count(*) FROM summary)) as value\nFROM summary\nWHERE $__timeFilter(closure_datetime)\nORDER BY closure_datetime ASC\n",
+          "rawSql": "SELECT\n   (SELECT count(*) FROM trip_approve where trip_status = \"Approved\" ) / (SELECT count(*) FROM trip_approve) as value",
           "refId": "A",
           "select": [
             [
@@ -502,8 +532,8 @@
           ]
         }
       ],
-      "thresholds": "",
-      "title": "Successful Engagement Ratio Overall",
+      "thresholds": "0.5,0.8",
+      "title": "Approved Trips Percentage",
       "type": "singlestat",
       "valueFontSize": "80%",
       "valueMaps": [
@@ -605,7 +635,7 @@
         }
       ],
       "thresholds": "",
-      "title": "Total Engagement Cost",
+      "title": "Total Trips Cost",
       "type": "singlestat",
       "valueFontSize": "200%",
       "valueMaps": [
@@ -707,7 +737,7 @@
         }
       ],
       "thresholds": "100, 300",
-      "title": "Average Engagement Cost",
+      "title": "Average Trips Cost",
       "type": "singlestat",
       "valueFontSize": "200%",
       "valueMaps": [
@@ -720,110 +750,9 @@
       "valueName": "avg"
     },
     {
-      "cacheTimeout": null,
-      "colorBackground": false,
-      "colorValue": true,
-      "colors": [
-        "#64b0c8",
-        "#64b0c8",
-        "#64b0c8"
-      ],
-      "datasource": "camunda_demo",
-      "format": "none",
-      "gauge": {
-        "maxValue": 100,
-        "minValue": 0,
-        "show": false,
-        "thresholdLabels": false,
-        "thresholdMarkers": true
-      },
-      "gridPos": {
-        "h": 6,
-        "w": 6,
-        "x": 0,
-        "y": 16
-      },
-      "id": 7,
-      "interval": null,
-      "links": [],
-      "mappingType": 1,
-      "mappingTypes": [
-        {
-          "name": "value to text",
-          "value": 1
-        },
-        {
-          "name": "range to text",
-          "value": 2
-        }
-      ],
-      "maxDataPoints": 100,
-      "nullPointMode": "connected",
-      "nullText": null,
-      "postfix": "",
-      "postfixFontSize": "50%",
-      "prefix": "",
-      "prefixFontSize": "50%",
-      "rangeMaps": [
-        {
-          "from": "null",
-          "text": "N/A",
-          "to": "null"
-        }
-      ],
-      "sparkline": {
-        "fillColor": "rgba(31, 118, 189, 0.18)",
-        "full": false,
-        "lineColor": "rgb(31, 120, 193)",
-        "show": false
-      },
-      "tableColumn": "value",
-      "targets": [
-        {
-          "alias": "",
-          "format": "time_series",
-          "group": [],
-          "hide": false,
-          "metricColumn": "none",
-          "rawQuery": true,
-          "rawSql": "SELECT\n  unix_timestamp(closure_datetime) as time_sec,\n  (SUM(successful)/(SELECT COUNT(*) FROM employees)) as value\nFROM summary\nWHERE $__timeFilter(closure_datetime)\nGROUP BY closure_datetime",
-          "refId": "A",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "column"
-              }
-            ]
-          ],
-          "timeColumn": "time",
-          "where": [
-            {
-              "name": "$__timeFilter",
-              "params": [],
-              "type": "macro"
-            }
-          ]
-        }
-      ],
-      "thresholds": "",
-      "title": "Successful Engagements Count Per Employee",
-      "type": "singlestat",
-      "valueFontSize": "200%",
-      "valueMaps": [
-        {
-          "op": "=",
-          "text": "N/A",
-          "value": "null"
-        }
-      ],
-      "valueName": "total"
-    },
-    {
       "aliasColors": {},
       "bars": true,
+      "cacheTimeout": null,
       "dashLength": 10,
       "dashes": false,
       "datasource": "camunda_demo",
@@ -831,10 +760,10 @@
       "gridPos": {
         "h": 6,
         "w": 6,
-        "x": 6,
+        "x": 0,
         "y": 16
       },
-      "id": 15,
+      "id": 7,
       "legend": {
         "avg": false,
         "current": false,
@@ -849,7 +778,7 @@
       "links": [],
       "nullPointMode": "null",
       "percentage": false,
-      "pointradius": 5,
+      "pointradius": 2,
       "points": false,
       "renderer": "flot",
       "seriesOverrides": [],
@@ -864,7 +793,7 @@
           "hide": false,
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "SELECT\n  unix_timestamp(closure_datetime) as time_sec,\n  count(*) as value,\n  employees.full_name as metric\nFROM summary smm\nINNER JOIN employees ON employees.id = smm.employee_id\nWHERE $__timeFilter(closure_datetime)\ngroup by metric, time_sec\norder by time_sec",
+          "rawSql": "SELECT\n  UNIX_TIMESTAMP(generation_datetime) as time_sec,\n  count(*) as value,\n  trip_address as metric\nFROM trip_report_information\nWHERE $__timeFilter(generation_datetime)\nGROUP BY time_sec, metric",
           "refId": "A",
           "select": [
             [
@@ -890,7 +819,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Total Engagement By Employee",
+      "title": "Trips destinations",
       "tooltip": {
         "shared": false,
         "sort": 0,
@@ -908,9 +837,8 @@
       },
       "yaxes": [
         {
-          "decimals": 0,
           "format": "short",
-          "label": "",
+          "label": null,
           "logBase": 1,
           "max": null,
           "min": null,
@@ -931,6 +859,83 @@
       }
     },
     {
+      "columns": [],
+      "datasource": "camunda_demo",
+      "fontSize": "100%",
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 6,
+        "y": 16
+      },
+      "id": 15,
+      "links": [],
+      "pageSize": null,
+      "scroll": true,
+      "showHeader": true,
+      "sort": {
+        "col": 0,
+        "desc": true
+      },
+      "styles": [
+        {
+          "alias": "Time",
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "pattern": "Time",
+          "type": "date"
+        },
+        {
+          "alias": "",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "decimals": 2,
+          "pattern": "/.*/",
+          "thresholds": [],
+          "type": "number",
+          "unit": "short"
+        }
+      ],
+      "targets": [
+        {
+          "alias": "",
+          "format": "table",
+          "group": [],
+          "hide": false,
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT *\nFROM trip_report_information",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "timeColumn": "time",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Trips Informations",
+      "transform": "table",
+      "type": "table"
+    },
+    {
       "aliasColors": {},
       "breakPoint": "50%",
       "cacheTimeout": null,
@@ -944,7 +949,7 @@
       "gridPos": {
         "h": 6,
         "w": 6,
-        "x": 12,
+        "x": 18,
         "y": 16
       },
       "id": 9,
@@ -993,70 +998,6 @@
       "title": "Expenses By Type",
       "type": "grafana-piechart-panel",
       "valueName": "total"
-    },
-    {
-      "aliasColors": {},
-      "breakPoint": "50%",
-      "cacheTimeout": null,
-      "combine": {
-        "label": "Others",
-        "threshold": 0
-      },
-      "datasource": "camunda_demo",
-      "fontSize": "80%",
-      "format": "short",
-      "gridPos": {
-        "h": 6,
-        "w": 6,
-        "x": 18,
-        "y": 16
-      },
-      "id": 11,
-      "interval": null,
-      "legend": {
-        "show": true,
-        "sideWidth": null,
-        "values": true
-      },
-      "legendType": "Right side",
-      "links": [],
-      "maxDataPoints": 3,
-      "nullPointMode": "connected",
-      "pieType": "donut",
-      "strokeWidth": "0",
-      "targets": [
-        {
-          "alias": "",
-          "format": "time_series",
-          "group": [],
-          "hide": false,
-          "metricColumn": "none",
-          "rawQuery": true,
-          "rawSql": "SELECT\nUNIX_TIMESTAMP(generation_datetime) as time_sec,\nCOUNT(*) as value,\n  report_type as metric\nFROM report_generations\nWHERE $__timeFilter(generation_datetime)\nGROUP BY report_type, generation_datetime",
-          "refId": "A",
-          "select": [
-            [
-              {
-                "params": [
-                  "value"
-                ],
-                "type": "column"
-              }
-            ]
-          ],
-          "timeColumn": "time",
-          "where": [
-            {
-              "name": "$__timeFilter",
-              "params": [],
-              "type": "macro"
-            }
-          ]
-        }
-      ],
-      "title": "Reports Generated By Type",
-      "type": "grafana-piechart-panel",
-      "valueName": "total"
     }
   ],
   "refresh": false,
@@ -1067,8 +1008,8 @@
     "list": []
   },
   "time": {
-    "from": "now/M",
-    "to": "now/M"
+    "from": "2019-04-15T12:18:11.033Z",
+    "to": "2019-04-15T13:15:53.988Z"
   },
   "timepicker": {
     "refresh_intervals": [
