@@ -10,7 +10,7 @@ module "kub" {
 ```
 instead of `../aws-kub` specified in this example
 
-## pre-deployment configuration for the camunda flow
+## pre-deployment configuration for the camunda process
 
 In this section some points referencing configuration based on [groovy ConfigSlurper](http://docs.groovy-lang.org/latest/html/gapi/groovy/util/ConfigSlurper.html).
 
@@ -20,7 +20,7 @@ It is located here: [./persistent/bpm/artifacts/server/apache-tomcat-9.0.12/conf
 2. check your jira project id mathes defined in `camunda-groovyx.cfg.gsp` line 48 ( rest.jira.tripRegister.body )
 3. register gmail account to send mails and specify `tf_mail_user` and `tf_mail_pass` variables in `1.auto.tfvars`. alternatively you can change mail server parameters in `camunda-groovyx.cfg.gsp`.
 
-## camunda flow users
+## camunda users
 
 there are following predefined users:
 ```
@@ -31,7 +31,7 @@ prjman / demo		project manager
 finmon / demo		financial monitoring
 ```
 
-## camunda flow scenario
+## camunda process scenario
 
 Use 2 browsers. 1st for administration. 2nd to execute flow.
 
