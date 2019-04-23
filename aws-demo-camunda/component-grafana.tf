@@ -44,8 +44,18 @@ module "port-grafana-https" {
   ports           = "${local.component_ports["grafana"]}"
   params          = "${ module.kub.default_port_params }"
 }
+module "port-grafana-http" {
+  //source          = "github.com/eleks/terraform-kubernetes-demo/aws-listener"
+  source          = "../aws-listener"
+  port            = "http"
+  ports           = "${local.component_ports["grafana"]}"
+  params          = "${ module.kub.default_port_params }"
+}
 
-output "component-grafana" {
+output "component-grafana-https" {
   value = "${module.port-grafana-https.public_protocol}://${data.null_data_source.component_hosts.outputs["grafana"]}:${module.port-grafana-https.public_port}"
+}
+output "component-grafana-http" {
+  value = "${module.port-grafana-http.public_protocol}://${data.null_data_source.component_hosts.outputs["grafana"]}:${module.port-grafana-http.public_port}"
 }
 

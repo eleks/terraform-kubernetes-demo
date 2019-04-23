@@ -75,13 +75,27 @@ data "template_file" "claim_volumes" {
   }
 }
 
+
+# combine only unique doc+kub ports
+data "template_file" "service_ports_list" {
+  template = "$${p1} $${p2}"
+  count    = "${length(local.ports)}"
+  vars {
+    p1 = "${ element(split(" ", element(local.ports,count.index) ),0)  }"
+    p2 = "${ element(split(" ", element(local.ports,count.index) ),1)  }"
+  }
+}
+locals {
+  service_ports_unique = "${distinct(data.template_file.service_ports_list.*.rendered)}"
+}
+
 data "template_file" "service_ports" {
-  count    = "${length( local.ports )}"
+  count    = "${length( local.service_ports_unique )}"
   template = "${file( "${path.module}/templates/service_ports.yml" )}"
   vars {
     tf_name       = "${ var.name }"
-    tf_port_local = "${ element(split(" ",element(local.ports,count.index)),0) }"
-    tf_port_node  = "${ element(split(" ",element(local.ports,count.index)),1) }"
+    tf_port_local = "${ element(split(" ",element(local.service_ports_unique,count.index)),0) }"
+    tf_port_node  = "${ element(split(" ",element(local.service_ports_unique,count.index)),1) }"
   }
 }
 
@@ -103,7 +117,13 @@ data "template_file" "component-yml" {
   }
 }
 
-resource "null_resource" "apply" {
+resource "local_file" "delme" {
+    content     = "${data.template_file.component-yml.rendered}"
+    filename = "${path.root}/delme.yaml"
+}
+
+
+resource "null_resource" "component-apply" {
   count = "1"
   connection {
     type        = "ssh"
@@ -129,7 +149,7 @@ resource "null_resource" "apply" {
 }
 
 
-resource "null_resource" "destroy" {
+resource "null_resource" "component-delete" {
   count = "1"
   connection {
     type        = "ssh"

@@ -19,7 +19,8 @@ locals {
       # https   = "8080 31180 8043 HTTP"   # expose https=8043
     }
     grafana = {
-      https   = "3000 31190 3000 HTTP"
+      http    = "3000 31190 3080 HTTP"
+      https   = "3000 31190 3043 HTTP"
     }
   }
 }
