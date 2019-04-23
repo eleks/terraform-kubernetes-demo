@@ -133,21 +133,22 @@ resource "null_resource" "init-master" {
 
 
 # generate bootstapped token for kubeadm
-resource "random_shuffle" "kubeadm_token1" {
-  input = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
-  result_count = 6
+resource "random_string" "kubeadm_token1" {
+  length  = "6"
+  special = false
+  upper   = false
 }
-
-resource "random_shuffle" "kubeadm_token2" {
-  input = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
-  result_count = 16
+resource "random_string" "kubeadm_token2" {
+  length  = "16"
+  special = false
+  upper   = false
 }
 
 data "template_file" "kubeadm_token" {
   template = "$${v1}.$${v2}"
   vars {
-    v1 = "${join("",random_shuffle.kubeadm_token1.result)}"
-    v2 = "${join("",random_shuffle.kubeadm_token2.result)}"
+    v1 = "${random_string.kubeadm_token1.result}"
+    v2 = "${random_string.kubeadm_token2.result}"
   }
 }
 
