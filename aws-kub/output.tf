@@ -25,3 +25,6 @@ output "default_port_params" {
   value = "${data.null_data_source.default_port_params.outputs}"
 }
 
+output "kubeapi_token" {
+  value = "${local.kubeapi_token}"
+}

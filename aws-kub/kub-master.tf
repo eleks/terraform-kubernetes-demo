@@ -61,6 +61,14 @@ resource "null_resource" "wait-master" {
   depends_on = [ "aws_instance.master" ]
 }
 
+resource "random_string" "kubeapi_token" {
+  length = "${ length(var.kubeapi_token)==0 ? 128 : 0 }"
+  special = false
+}
+locals {
+  kubeapi_token = "${var.kubeapi_token}${random_string.kubeapi_token.result}"
+}
+
 resource "null_resource" "provision-master" {
   connection {
     bastion_host= "${aws_instance.bastion.public_ip}"
@@ -81,7 +89,7 @@ resource "null_resource" "provision-master" {
   }
   # auth static file for kubeapi
   provisioner "file" {
-    content       = "${var.kubeapi_token},deployer,1"
+    content       = "${local.kubeapi_token},deployer,1"
     destination   = "/home/centos/provision/auth.csv"
   }
   depends_on=["null_resource.wait-master"]
@@ -126,12 +134,12 @@ resource "null_resource" "init-master" {
 
 # generate bootstapped token for kubeadm
 resource "random_shuffle" "kubeadm_token1" {
-  input = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "a", "b", "c", "d", "e", "f", "g", "h", "i", "t", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
+  input = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
   result_count = 6
 }
 
 resource "random_shuffle" "kubeadm_token2" {
-  input = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "a", "b", "c", "d", "e", "f", "g", "h", "i", "t", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
+  input = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
   result_count = 16
 }
 

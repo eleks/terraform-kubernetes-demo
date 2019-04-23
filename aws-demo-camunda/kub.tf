@@ -32,6 +32,6 @@ output "kub-dashboard" {
 }
 
 output "kub-token" {
-  value = "${var.kubeapi_token}"
+  value = "${module.kub.kubeapi_token}"
 }
 

@@ -6,7 +6,7 @@ variable "aws_region"     { default = "us-west-2" }
 
 variable "aws_access_key" {}
 variable "aws_secret_key" {}
-variable "kubeapi_token"  {}
+variable "kubeapi_token"  { default = "" }
 
 variable "tf_mail_user"   {} // "...@gmail.com"
 variable "tf_mail_pass"   {} // "hkgfkhgvkvfigfkhvvlv"

@@ -3,7 +3,7 @@
 #--------------------------------------------------------
 #variable "aws_access_key"     {}
 #variable "aws_secret_key"     {}
-variable "kubeapi_token"   {}  # predefined token to access kubernetes api&dashboard
+variable "kubeapi_token"      { default = "" }  # predefined token to access kubernetes api&dashboard. if empty it will be generated automatically
 
 variable "cluster_name"       { default = "" }
 #variable "aws_region"         { default = "us-west-1" }
