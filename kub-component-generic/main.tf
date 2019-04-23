@@ -117,12 +117,6 @@ data "template_file" "component-yml" {
   }
 }
 
-resource "local_file" "delme" {
-    content     = "${data.template_file.component-yml.rendered}"
-    filename = "${path.root}/delme.yaml"
-}
-
-
 resource "null_resource" "component-apply" {
   count = "1"
   connection {
