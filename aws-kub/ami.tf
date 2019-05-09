@@ -8,7 +8,7 @@ data "aws_ami" "centos_ami" {
 
   filter {
     name   = "name"
-    values = ["CentOS Linux 7 x86_64 HVM EBS *"]
+    values = ["${var.image_filter_name}"]
   }
   filter {
     name   = "architecture"
