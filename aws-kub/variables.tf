@@ -9,7 +9,7 @@ variable "cluster_name"       { default = "" }
 #variable "aws_region"         { default = "us-west-1" }
 variable "aws_az_count"       { default = 2 } # must be minimum 2 to use load balancer
 
-variable "image_filter_name"  { default = "CentOS Linux 7 x86_64 HVM EBS *" }
+variable "image_filter_name"  { default = "CentOS Linux 7 x86_64 HVM EBS ENA 1805*" }
 
 variable "aws_cidr"           { default = "172.16.0.0/16" }
 variable "flannel_cidr"       { default = "10.244.0.0/16" }
