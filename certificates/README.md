@@ -1,4 +1,4 @@
-This section describes how to create trusted certificates for wso2 components.
+This section describes how to create trusted certificates for kub components.
 
 To minimize initial efforts we assume that our cloud provides as minimum one public dynamic DNS like: AAAA-XXXXXXXXXXXXXXXX.elb.us-west-1.amazonaws.com
 
@@ -6,11 +6,11 @@ We have created a wildcard certificate for `*.us-west-1.elb.amazonaws.com` that 
 that also has the following domains as alternatives: 
 
 ```shell
-localhost                      # some wso2 services need this
+localhost                      # some services need this
 192.168.99.100                 # default ip address for docker in virtualbox
 *.docker.local                 # docker-compose env  
 *.default.svc.cluster.local    # kubernetes default domain
-# default auto-generated public host name for some aws zones
+# default auto-generated public host names for some aws zones
 *.eu-west-1.elb.amazonaws.com  
 *.eu-west-2.elb.amazonaws.com
 *.eu-west-3.elb.amazonaws.com
@@ -34,7 +34,7 @@ but for simplicity I used http://keystore-explorer.org/
 
 ## files in this directory
 
-> all the keystores secured with default wso2 password: `wso2carbon`
+> all the keystores secured with password: `wso2carbon`
 
 - `ca.jks` (removed for security reason) the custom keystore with keypair to be a CA (Certificate authority) certificate.
 - `ca.docker.local.cer` public CA certificate to be imported into client's truststore (browsers, etc.)
