@@ -4,7 +4,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: deployer-role
 rules:
-- apiGroups: ["", "batch", "extensions", "apps"]
+- apiGroups: ["*", "batch", "extensions", "apps"]
   resources: ["*"]
   verbs: ["*"]
 
