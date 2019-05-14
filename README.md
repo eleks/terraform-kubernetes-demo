@@ -2,7 +2,7 @@
 
 the simple terraform module set to create kubernetes cluster. could be used for demo, dev, test environments
 
-screencast: https://www.loom.com/share/19d4c1dd5500450eb5ae4857e2e87d1c
+screencast: https://youtu.be/TVhM6UuwNdM
 
 ## Modules Overview
 
