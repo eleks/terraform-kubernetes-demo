@@ -53,9 +53,13 @@ https://HOST.amazonaws.com:3000
 
 #### jira
 
-https://jiravm.atlassian.net/projects/BT/board
+https://JIRA_ACCOUNT.atlassian.net/projects/PROJECT_NAME/board
 
-> your login and pass
+> where JIRA_ACCOUNT is a jira cloud account name 
+> and PROJECT_NAME is a jira project name
+> Going to this link requires your jira login and pass
+
+in this demo: https://bpm-demo.atlassian.net/projects/TRIP/board
   
 #### camunda-cockpit to see process definition and how many instances running at each process step
 http://HOST.amazonaws.com:8080/
