@@ -12,9 +12,14 @@ aws_secret_key = "hLKJlkjLKJlkjLKJlkjLKJlkjLKJlkjLKJlkj123"
 # skip it you don't want to execute process instance inside camunda
 tf_mail_user   = "someone@gmail.com"
 tf_mail_pass   = "LKJlkjLKJlkjLKJlkjkj"
+
+# follow the instructions to generate jira token: 
+# https://confluence.atlassian.com/cloud/api-tokens-938839638.html
 tf_jira_auth   = "Basic dmLKJlkjLKJlkjLKJlkjLKJlkjLKJLkjLKJlkjlKJlkjlKJLkjLKJlkj"
 # mysql database will be created with following root credentials
+
 tf_db_user     = "root"
 tf_db_pass     = "LKJlkjLKJlkj"
+
 # admin password for grafana
 tf_grafana_pass= "demo"

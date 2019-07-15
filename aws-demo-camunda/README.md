@@ -1,4 +1,4 @@
-## A sample root terraform module to create your cluster
+## A sample root terraform module to create required cluster
 
 NOTE: to load modules in your project you can use the following `source` parameter:
 
@@ -12,13 +12,14 @@ instead of `../aws-kub` specified in this example
 
 ## pre-deployment configuration for the camunda process
 
-In this section some points referencing configuration based on [groovy ConfigSlurper](http://docs.groovy-lang.org/latest/html/gapi/groovy/util/ConfigSlurper.html).
+there are some additional parameters defined in corresponding component configuration required by this demo: [00-camunda.yaml](./persistent/bpm/conf/00-camunda.yaml)
 
-It is located here: [./persistent/bpm/artifacts/server/apache-tomcat-9.0.12/conf/camunda-groovyx.cfg.gsp](./persistent/bpm/artifacts/server/apache-tomcat-9.0.12/conf/camunda-groovyx.cfg.gsp)
-
-1. register trial jira account and provide a credentials to register jira issue in the variable `tf_jira_auth` in `1.auto.tfvars` file
-2. check your jira project id mathes defined in `camunda-groovyx.cfg.gsp` line 48 ( rest.jira.tripRegister.body )
-3. register gmail account to send mails and specify `tf_mail_user` and `tf_mail_pass` variables in `1.auto.tfvars`. alternatively you can change mail server parameters in `camunda-groovyx.cfg.gsp`.
+1. register trial jira-core atlassian cloud account and provide a credentials to register jira issue in the variable `tf_jira_auth` in `1.auto.tfvars` file
+   follow the instructions to get api token: https://confluence.atlassian.com/cloud/api-tokens-938839638.html
+2. create the jira project (TRIP) and store `jira url`, `project id`, and `issue type id` into [00-camunda.yaml](./persistent/bpm/conf/00-camunda.yaml).
+   get IDs in `project settings`.
+3. register gmail account to send mails and specify `tf_mail_user` and `tf_mail_pass` variables in `1.auto.tfvars`. alternatively you can change mail server parameters in 
+   [00-camunda.yaml](./persistent/bpm/conf/00-camunda.yaml)
 
 ## camunda users
 

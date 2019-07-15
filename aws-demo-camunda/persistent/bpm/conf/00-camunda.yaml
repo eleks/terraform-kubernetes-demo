@@ -22,6 +22,14 @@ camunda:
   mail:
     user: ${tf_mail_user}
     pass: ${tf_mail_pass}
+    host: smtp.gmail.com
+    port: 587
+    tls: true
   rest:
     jira:
+      url: https://bpm-demo.atlassian.net
+      # api: https://bpm-demo.atlassian.net/rest/api/2
       auth: ${tf_jira_auth}
+      trip:
+        projectId: 10001
+        issueType: 10100
