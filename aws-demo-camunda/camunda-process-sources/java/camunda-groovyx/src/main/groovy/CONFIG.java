@@ -13,13 +13,13 @@ import java.util.Timer;
 import java.util.TimerTask;
 import org.codehaus.groovy.runtime.MethodClosure;
 
-public class CONFIG{
+public class CONFIG {
 	//private static File cfgFile = null;
-	private static ConfigObject cfg = null;
-	private static volatile Dependency dependency = new Dependency();
+	private static ConfigObject internal$cfg = null;
+	private static volatile Dependency internal$dependency = new Dependency();
 
-	private static Timer timer = null;
-	private static Object syncKey = new Object();
+	private static Timer internal$timer = null;
+	private static Object internal$syncKey = new Object();
 
 	public static class Dependency{
 		private long lastModified = 0;
@@ -89,20 +89,20 @@ public class CONFIG{
 	}
 
 	public static ConfigObject get(){
-		if(cfg==null){
-			synchronized(syncKey) {
-				if(cfg==null){
+		if(internal$cfg==null){
+			synchronized(internal$syncKey) {
+				if(internal$cfg==null){
 					try {
-						cfg = dependency.load(lookupRootConfig());
-						if(timer==null){
-							timer = new Timer(CONFIG.class.getName(), true);
-							timer.schedule(new TimerTask(){
+						internal$cfg = internal$dependency.load(lookupRootConfig());
+						if(internal$timer==null){
+							internal$timer = new Timer(CONFIG.class.getName(), true);
+							internal$timer.schedule(new TimerTask(){
 									public void run(){
 										try{
-											if(dependency.changed()){
+											if(internal$dependency.changed()){
 												Dependency newDependency = new Dependency();
-												cfg=newDependency.load(lookupRootConfig());
-												dependency = newDependency;
+												internal$cfg=newDependency.load(lookupRootConfig());
+												internal$dependency = newDependency;
 												System.err.println(CONFIG.class.getName()+".timer config reloaded");
 											}
 										}catch(Throwable t){
@@ -117,7 +117,7 @@ public class CONFIG{
 				}
 			}	
 		}
-		return cfg;
+		return internal$cfg;
 	}
 
 	public static Object get(String keys){
@@ -142,6 +142,13 @@ public class CONFIG{
 	public static Number getNumber(String keys){
 		return (Number) get(keys);
 	}
+
+	/** this will be called by groovy when internal property not found */
+    public static Object $static_propertyMissing(String key){
+    	Object v = CONFIG.get("rest."+key);
+    	if(v==null)throw new RuntimeException("Config key not found `rest."+key+"`");
+        return v;
+    }
 
 
 }

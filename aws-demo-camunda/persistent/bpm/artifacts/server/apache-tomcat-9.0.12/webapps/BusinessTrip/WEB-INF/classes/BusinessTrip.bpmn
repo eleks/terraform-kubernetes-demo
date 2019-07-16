@@ -26,8 +26,8 @@
       </bpmn:lane>
       <bpmn:lane id="Lane_065lnel" name="Employee">
         <bpmn:flowNodeRef>Task_1hoq4r6</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>StartEvent_1</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>EndEvent_1djcxo9</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>StartEvent_1</bpmn:flowNodeRef>
       </bpmn:lane>
       <bpmn:lane id="Lane_02nrwyr" name="Financial Monitoring">
         <bpmn:flowNodeRef>Task_0phu4yg</bpmn:flowNodeRef>
@@ -37,9 +37,7 @@
       <bpmn:incoming>SequenceFlow_1xayheg</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_046li36</bpmn:outgoing>
       <bpmn:script>def j = REST.jira.comment(JiraKey, TripInfoBudget)
-REST.jira.toStatus(JiraKey, "In Progress")
-
-</bpmn:script>
+REST.jira.toStatus(JiraKey, "In Progress")</bpmn:script>
     </bpmn:scriptTask>
     <bpmn:userTask id="Task_1hoq4r6" name="report spends" camunda:assignee="${EmployeeId}">
       <bpmn:extensionElements>
@@ -145,46 +143,24 @@ REST.jira.toStatus(JiraKey, "In Progress")
     <bpmn:scriptTask id="Task_0abzsah" name="init flow" scriptFormat="groovy">
       <bpmn:documentation>insert into trip_report_information (trip_address , trip_purpose , trip_id , employee_id)
 values ( :TripAddress, :TripPurpose, :TripId, :EmployeeId )
-/
-</bpmn:documentation>
+/</bpmn:documentation>
       <bpmn:incoming>SequenceFlow_1psb2uq</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0bzfr89</bpmn:outgoing>
       <bpmn:script>def user = CAMUNDA.currentUser()
 def uuid = "trip-"+Long.toHexString(UUID.randomUUID().getMostSignificantBits())
 
-execution.setVariable( "EmployeeId", user.getId() )
-execution.setVariable( "EmployeeMail", user.getEmail() )
-execution.setVariable( "TripId", uuid )
-execution.setVariable( "Status", "Approved" )
-execution.setVariable( "SpendAmount", 0 )
-execution.setVariable( "TripTitle", TripPurpose +" at "+TripAddress )
+execution.setVariables(
+  EmployeeId:   user.getId(),
+  EmployeeMail: user.getEmail(),
+  TripId:       uuid,
+  Status:       "Approved",
+  SpendAmount:  0,
+  TripTitle:    TripPurpose +" at "+TripAddress,
+)
+
 
 SQL.execute('demo',CAMUNDA.doc())</bpmn:script>
     </bpmn:scriptTask>
-    <bpmn:startEvent id="StartEvent_1" name="Request Started">
-      <bpmn:extensionElements>
-        <camunda:formData>
-          <camunda:formField id="TripAddress" label="Where to go, Address" type="string">
-            <camunda:validation>
-              <camunda:constraint name="required" />
-            </camunda:validation>
-          </camunda:formField>
-          <camunda:formField id="TripPurpose" label="Purpose" type="string">
-            <camunda:validation>
-              <camunda:constraint name="required" />
-            </camunda:validation>
-          </camunda:formField>
-          <camunda:formField id="ProjectManagerId" label="Project Manager" type="string" defaultValue="prjman" />
-          <camunda:formField id="TripStart" label="Start Date" type="date">
-            <camunda:validation>
-              <camunda:constraint name="required" />
-            </camunda:validation>
-          </camunda:formField>
-          <camunda:formField id="TripDays" label="Number of Days" type="long" defaultValue="5" />
-        </camunda:formData>
-      </bpmn:extensionElements>
-      <bpmn:outgoing>SequenceFlow_1psb2uq</bpmn:outgoing>
-    </bpmn:startEvent>
     <bpmn:scriptTask id="Task_1cqfale" name="register jira issue" scriptFormat="groovy">
       <bpmn:documentation>Busines trip # ${TripId}
 
@@ -198,11 +174,13 @@ Days: ${TripDays}</bpmn:documentation>
       <bpmn:outgoing>SequenceFlow_0hh7u1p</bpmn:outgoing>
       <bpmn:script>def tripInfo = TEMPLATE.doc() //generate from documentation
 def j = REST.jira.tripRegister("$TripId: $TripTitle", tripInfo)
-def base = "https://jiravm.atlassian.net/browse/"
+def link = REST.jira.browse(j.key)
+
 //store result into variables
-tripInfo += "\n" + base+j.key 
+tripInfo += "\n" + link
+
 execution.setVariable( "TripInfoMain", tripInfo )
-execution.setVariable( "JiraLink", base+j.key )
+execution.setVariable( "JiraLink", link )
 execution.setVariable( "JiraKey", j.key )</bpmn:script>
     </bpmn:scriptTask>
     <bpmn:sequenceFlow id="SequenceFlow_041539i" sourceRef="Task_1fsb47l" targetRef="Task_0zgs6t0" />
@@ -308,8 +286,7 @@ execution.setVariable( "TripInfoBudget", budget )</bpmn:script>
       <bpmn:incoming>SequenceFlow_1yu9irh</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1vkctq7</bpmn:outgoing>
       <bpmn:outgoing>SequenceFlow_0gq073p</bpmn:outgoing>
-      <bpmn:script>println "TODO"
-</bpmn:script>
+      <bpmn:script>println "TODO"</bpmn:script>
     </bpmn:scriptTask>
     <bpmn:scriptTask id="Task_0xgy8jg" name="report financial system" scriptFormat="groovy">
       <bpmn:documentation>insert into payments (payment_type, trip_id , payment, employee_id)
@@ -344,8 +321,7 @@ execution.setVariable( "TripInfoStatus", info)
 SQL.execute('demo', '''
   insert into trip_approve (trip_id, trip_status , employee_id)
   values (  :TripId, :Status, :EmployeeId )
-''')
-</bpmn:script>
+''')</bpmn:script>
     </bpmn:scriptTask>
     <bpmn:userTask id="Task_0phu4yg" name="exception&#10;approve" default="SequenceFlow_0k4oeh0" camunda:assignee="finmon" camunda:candidateGroups="FinancialMonitoring">
       <bpmn:extensionElements>
@@ -499,11 +475,35 @@ SQL.execute('demo', '''
     <bpmn:sequenceFlow id="SequenceFlow_1xko812" name="overspend?" sourceRef="Task_0v82qhu" targetRef="Task_0phu4yg">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression" language="groovy">SpendAmount &gt; DaylyExpences</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
+    <bpmn:startEvent id="StartEvent_1" name="Request Started">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="TripAddress" label="Where to go, Address" type="string">
+            <camunda:validation>
+              <camunda:constraint name="required" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="TripPurpose" label="Purpose" type="string">
+            <camunda:validation>
+              <camunda:constraint name="required" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="ProjectManagerId" label="Project Manager" type="string" defaultValue="prjman" />
+          <camunda:formField id="TripStart" label="Start Date" type="date">
+            <camunda:validation>
+              <camunda:constraint name="required" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="TripDays" label="Number of Days" type="long" defaultValue="5" />
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:outgoing>SequenceFlow_1psb2uq</bpmn:outgoing>
+    </bpmn:startEvent>
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_0my45du">
       <bpmndi:BPMNShape id="Participant_0jjc4bq_di" bpmnElement="Participant_0jjc4bq" isHorizontal="true">
-        <dc:Bounds x="156" y="78" width="1464" height="742" />
+        <dc:Bounds x="156" y="78" width="1695" height="742" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1" bioc:stroke="rgb(67, 160, 71)" bioc:fill="rgb(200, 230, 201)">
         <dc:Bounds x="251" y="297" width="36" height="36" />
@@ -540,7 +540,7 @@ SQL.execute('demo', '''
         <dc:Bounds x="350" y="444" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Lane_0s6eyos_di" bpmnElement="Lane_0s6eyos" isHorizontal="true">
-        <dc:Bounds x="186" y="695" width="1434" height="125" />
+        <dc:Bounds x="186" y="695" width="1665" height="125" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="UserTask_1lsl137_di" bpmnElement="Task_0zgs6t0" bioc:stroke="rgb(30, 136, 229)" bioc:fill="rgb(187, 222, 251)">
         <dc:Bounds x="644" y="710" width="100" height="80" />
@@ -638,16 +638,16 @@ SQL.execute('demo', '''
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Lane_1yygrvp_di" bpmnElement="Lane_1yygrvp" isHorizontal="true">
-        <dc:Bounds x="186" y="561" width="1434" height="134" />
+        <dc:Bounds x="186" y="561" width="1665" height="134" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Lane_01u1x5y_di" bpmnElement="Lane_01u1x5y" isHorizontal="true" bioc:stroke="rgb(67, 160, 71)" bioc:fill="rgb(200, 230, 201)">
-        <dc:Bounds x="186" y="401" width="1434" height="160" />
+        <dc:Bounds x="186" y="401" width="1665" height="160" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Lane_065lnel_di" bpmnElement="Lane_065lnel" isHorizontal="true">
-        <dc:Bounds x="186" y="235" width="1434" height="166" />
+        <dc:Bounds x="186" y="235" width="1665" height="166" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Lane_02nrwyr_di" bpmnElement="Lane_02nrwyr" isHorizontal="true">
-        <dc:Bounds x="186" y="78" width="1434" height="157" />
+        <dc:Bounds x="186" y="78" width="1665" height="157" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_106x9kh_di" bpmnElement="SequenceFlow_106x9kh">
         <di:waypoint x="744" y="750" />

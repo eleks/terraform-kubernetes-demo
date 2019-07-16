@@ -21,7 +21,10 @@ public class EMAIL {
 	*	bodyType    "html" or text by default
 	*/
 	public static void send(Map params){
-        Properties props = CONFIG.getMap("email") as Properties
+        Properties props = CONFIG.getMap("email") as Properties;
+        send(params, props);
+    }
+	public static void send(Map params, Properties props){
         //-----------------------------------------------------
 		def defaultFrom     = props.remove("mail.from");
 		def defaultFromName = props.remove("mail.fromName");
