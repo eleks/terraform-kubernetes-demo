@@ -27,9 +27,8 @@ camunda:
     tls: true
   rest:
     jira:
-      url: https://bpm-demo.atlassian.net
-      # api: https://bpm-demo.atlassian.net/rest/api/2
+      url: https://bpm-demo-01.atlassian.net
       auth: ${tf_jira_auth}
       trip:
-        projectId: 10001
-        issueType: 10100
+        projectId: 10000
+        issueType: 10001

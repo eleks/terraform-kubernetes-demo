@@ -12,11 +12,12 @@ instead of `../aws-kub` specified in this example
 
 ## pre-deployment configuration for the camunda process
 
-there are some additional parameters defined in corresponding component configuration required by this demo: [00-camunda.yaml](./persistent/bpm/conf/00-camunda.yaml)
+there are some additional parameters defined in camunda component config required by this demo: [00-camunda.yaml](./persistent/bpm/conf/00-camunda.yaml)
 
-1. register trial jira-core atlassian cloud account and provide a credentials to register jira issue in the variable `tf_jira_auth` in `1.auto.tfvars` file
+1. register trial jira-core atlassian cloud account
+2. provide a credentials to register jira issue in the variable `tf_jira_auth` in `1.auto.tfvars` file
    follow the instructions to get api token: https://confluence.atlassian.com/cloud/api-tokens-938839638.html
-2. create the jira project (TRIP) and store `jira url`, `project id`, and `issue type id` into [00-camunda.yaml](./persistent/bpm/conf/00-camunda.yaml).
+2. create the jira project (TRIP) and store `jira.url`, `jira.trip.projectId`, and `jira.trip.issueType` into [00-camunda.yaml](./persistent/bpm/conf/00-camunda.yaml).
    get IDs in `project settings`.
 3. register gmail account to send mails and specify `tf_mail_user` and `tf_mail_pass` variables in `1.auto.tfvars`. alternatively you can change mail server parameters in 
    [00-camunda.yaml](./persistent/bpm/conf/00-camunda.yaml)
