@@ -2,8 +2,8 @@
 
 the simple terraform module set to create kubernetes cluster. could be used for demo, dev, test environments
 
-deployment screencast: https://youtu.be/TVhM6UuwNdM
-camunda demo screencast: https://youtu.be/qJo_3Y1Qy74
+* deployment screencast: https://youtu.be/TVhM6UuwNdM
+* camunda demo screencast: https://youtu.be/qJo_3Y1Qy74
 
 ## Modules Overview
 
