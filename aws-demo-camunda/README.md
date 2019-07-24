@@ -1,18 +1,14 @@
-## A sample root terraform module to create required cluster
+## The terraform module to create kubernetes cluster with camunda+grafana
 
-NOTE: to load modules in your project you can use the following `source` parameter:
-
-```
-module "kub" {
-  source    = "github.com/eleks/terraform-kubernetes-demo/aws-kub"
-  ...
-}
-```
-instead of `../aws-kub` specified in this example
+Follow the instructions below to configure business process
 
 ## pre-deployment configuration for the camunda process
 
-there are some additional parameters defined in camunda component config required by this demo: [00-camunda.yaml](./persistent/bpm/conf/00-camunda.yaml)
+there are additional parameters defined in camunda component config required by this demo: [00-camunda.yaml](./persistent/bpm/conf/00-camunda.yaml)
+
+we aro going to send emails, manipulate data in the database, and integrate with jira in this demo.
+
+that's why you have to provide the following parameters in corresponting files:
 
 1. register trial jira-core atlassian cloud account
 2. provide a credentials to register jira issue in the variable `tf_jira_auth` in `1.auto.tfvars` file
@@ -21,6 +17,10 @@ there are some additional parameters defined in camunda component config require
    get IDs in `project settings`.
 3. register gmail account to send mails and specify `tf_mail_user` and `tf_mail_pass` variables in `1.auto.tfvars`. alternatively you can change mail server parameters in 
    [00-camunda.yaml](./persistent/bpm/conf/00-camunda.yaml)
+
+## create the infrastructure
+
+follow the [instructions](./..) to create the required infrastructure in AWS cloud.
 
 ## camunda users
 
