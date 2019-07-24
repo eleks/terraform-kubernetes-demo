@@ -147,12 +147,12 @@ values ( :TripAddress, :TripPurpose, :TripId, :EmployeeId )
       <bpmn:incoming>SequenceFlow_1psb2uq</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0bzfr89</bpmn:outgoing>
       <bpmn:script>def user = CAMUNDA.currentUser()
-def uuid = "trip-"+Long.toHexString(UUID.randomUUID().getMostSignificantBits())
+def id = execution.getProcessInstanceId()
 
 execution.setVariables(
   EmployeeId:   user.getId(),
   EmployeeMail: user.getEmail(),
-  TripId:       uuid,
+  TripId:       id,
   Status:       "Approved",
   SpendAmount:  0,
   TripTitle:    TripPurpose +" at "+TripAddress,
@@ -179,9 +179,11 @@ def link = REST.jira.browse(j.key)
 //store result into variables
 tripInfo += "\n" + link
 
-execution.setVariable( "TripInfoMain", tripInfo )
-execution.setVariable( "JiraLink", link )
-execution.setVariable( "JiraKey", j.key )</bpmn:script>
+execution.setVariables(
+  TripInfoMain: tripInfo,
+  JiraLink:     link ,
+  JiraKey:      j.key,
+)</bpmn:script>
     </bpmn:scriptTask>
     <bpmn:sequenceFlow id="SequenceFlow_041539i" sourceRef="Task_1fsb47l" targetRef="Task_0zgs6t0" />
     <bpmn:userTask id="Task_02pl4su" name="provide&#10;budget" camunda:candidateGroups="TripManagers">
@@ -305,7 +307,7 @@ values ( "Spends", :TripId, :SpendAmount, :EmployeeId )
       <bpmn:outgoing>SequenceFlow_12rovds</bpmn:outgoing>
       <bpmn:script>SQL.execute('demo', CAMUNDA.doc())</bpmn:script>
     </bpmn:scriptTask>
-    <bpmn:scriptTask id="Task_1kp0jf7" name="update jira" scriptFormat="groovy">
+    <bpmn:scriptTask id="Task_1kp0jf7" name="finalize jira" scriptFormat="groovy">
       <bpmn:documentation>Planned Dayly Spends: ${DaylyExpences} 
 Real Dayly Spends: ${SpendAmount}
 
