@@ -1,6 +1,9 @@
 ## The terraform module to create kubernetes cluster with camunda+grafana
 
-Follow the instructions below to configure business process
+Follow the instructions below to configure and deploy the business process at AWS cloud
+
+* deployment screencast: https://youtu.be/TVhM6UuwNdM
+* camunda demo screencast: https://youtu.be/qJo_3Y1Qy74
 
 ## pre-deployment configuration for the camunda process
 
